@@ -1,0 +1,18 @@
+# Local development environment overrides
+/local.nix
+
+#Task
+/.task/
+/Taskfile.yaml
+/Taskfile.yml
+
+# Misc
+.DS_Store
+.todo
+
+# Build
+/build/
+
+# Binary files (like runtime VM state)
+/bin/*
+!/bin/.gitkeep
