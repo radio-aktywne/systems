@@ -8,10 +8,6 @@
       url = "github:hercules-ci/flake-parts";
     };
 
-    impermanence = {
-      url = "github:nix-community/impermanence";
-    };
-
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -46,7 +42,7 @@
       flake = inputs.utils.mkHosts {
         inherit inputs;
         directory = "hosts";
-        hosts = [];
+        hosts = ["dyl"];
       };
 
       # Sensible defaults
