@@ -1,6 +1,8 @@
 {
   // Use latest pre-built image
   "image": "ghcr.io/radio-aktywne/devcontainers/generic:latest",
+  // Run a command when the container is created
+  "onCreateCommand": ".devcontainer/hooks/create.sh",
   // Run arguments
   "runArgs": [
     // Use host UTS namespace
