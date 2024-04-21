@@ -33,17 +33,8 @@
         name = "dyl-vm";
 
         network = {
-          # Don't use static default gateway
-          gateway = null;
-
           # Use different host ID for the virtual machine
           hostId = "cc4e8be2";
-
-          # Don't use static interface configuration
-          interfaces = lib.mkForce [];
-
-          # Don't use static DNS servers
-          nameservers = lib.mkForce [];
         };
       };
 
