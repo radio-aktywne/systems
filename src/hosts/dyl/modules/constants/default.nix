@@ -57,56 +57,10 @@
       };
 
       network = {
-        gateway = lib.mkOption {
-          default = "10.91.0.254";
-          description = "IP address of the default gateway";
-          type = lib.types.nullOr lib.types.str;
-        };
-
         hostId = lib.mkOption {
           default = "d2010ee8";
           description = "Unique identifier for the machine";
           type = lib.types.str;
-        };
-
-        interfaces = lib.mkOption {
-          default = [
-            {
-              name = "eno1";
-              address = "10.91.0.10";
-              netmask = 24;
-            }
-          ];
-          description = "List of network interfaces configuration";
-          type = lib.types.listOf (
-            lib.types.submodule {
-              options = {
-                name = lib.mkOption {
-                  description = "Name of the network interface";
-                  type = lib.types.str;
-                };
-
-                address = lib.mkOption {
-                  description = "IP address of the network interface";
-                  type = lib.types.str;
-                };
-
-                netmask = lib.mkOption {
-                  description = "Netmask of the network interface";
-                  type = lib.types.int;
-                };
-              };
-            }
-          );
-        };
-
-        nameservers = lib.mkOption {
-          default = [
-            "194.29.128.1"
-            "194.29.128.2"
-          ];
-          description = "List of DNS servers to use";
-          type = lib.types.listOf lib.types.str;
         };
       };
 
