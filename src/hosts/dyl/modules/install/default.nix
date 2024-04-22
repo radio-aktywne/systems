@@ -19,6 +19,7 @@
             src = ./install.sh;
 
             boot = config.constants.disks.a.partitions.boot.label;
+            data = config.constants.disks.b.partitions.data.label;
             diskA = config.constants.disks.a.path;
             diskB = config.constants.disks.b.path;
             flake = inputs.self;
@@ -28,7 +29,8 @@
             mkfsfat = "${pkgs.dosfstools}/bin/mkfs.fat";
             nixosinstall = "${pkgs.nixos-install-tools}/bin/nixos-install";
             parted = "${pkgs.parted}/bin/parted";
-            swap = config.constants.disks.b.partitions.swap.label;
+            swap = config.constants.disks.a.partitions.swap.label;
+            swapSize = config.constants.disks.a.partitions.swap.size;
           }
         );
       };
