@@ -22,10 +22,24 @@
                 type = lib.types.str;
               };
             };
+
+            swap = {
+              label = lib.mkOption {
+                default = "swap";
+                description = "Label for the swap partition";
+                type = lib.types.str;
+              };
+
+              size = lib.mkOption {
+                default = 8192;
+                description = "Size of the swap partition in MB";
+                type = lib.types.int;
+              };
+            };
           };
 
           path = lib.mkOption {
-            default = "/dev/sda";
+            default = "/dev/sdb";
             description = "Path to the disk";
             type = lib.types.path;
           };
@@ -33,17 +47,17 @@
 
         b = {
           partitions = {
-            swap = {
+            data = {
               label = lib.mkOption {
-                default = "swap";
-                description = "Label for the swap partition";
+                default = "data";
+                description = "Label for the data partition";
                 type = lib.types.str;
               };
             };
           };
 
           path = lib.mkOption {
-            default = "/dev/sdb";
+            default = "/dev/sdc";
             description = "Path to the disk";
             type = lib.types.path;
           };

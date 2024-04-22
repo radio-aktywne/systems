@@ -35,7 +35,7 @@
     # One swap device on separate partition
     {
       # We need to use partlabel here, because regular label can change with encryption
-      device = "/dev/disk/by-partlabel/${config.constants.disks.b.partitions.swap.label}";
+      device = "/dev/disk/by-partlabel/${config.constants.disks.a.partitions.swap.label}";
 
       randomEncryption = {
         # Allow TRIM requests to be sent to the swap device

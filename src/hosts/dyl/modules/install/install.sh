@@ -8,6 +8,7 @@
 # Second, some things need to be compatible with the host system
 
 BOOT='@boot@'
+DATA='@data@'
 DISK_A='@diskA@'
 DISK_B='@diskB@'
 FLAKEDIR='@flake@'
@@ -18,6 +19,7 @@ MKFSFAT='@mkfsfat@'
 NIXOSINSTALL='@nixosinstall@'
 PARTED='@parted@'
 SWAP='@swap@'
+SWAP_SIZE='@swapSize@'
 
 ### HELPER FUNCTIONS ###
 
@@ -86,7 +88,8 @@ if ! ${PARTED} --script --align optimal "${DISK_A}" -- \
 	mkpart "${BOOT}" fat32 1MB 512MB \
 	set 1 boot on \
 	set 1 esp on \
-	mkpart "${MAIN}" 512MB 100%; then
+	mkpart "${MAIN}" 512MB "-${SWAP_SIZE}" \
+	mkpart "${SWAP}" linux-swap "-${SWAP_SIZE}" 100%; then
 	printf '%s\n' "Partitioning disk ${DISK_A} failed" >&2
 	exit 1
 fi
@@ -96,7 +99,7 @@ fi
 # only swap partition
 if ! ${PARTED} --script --align optimal "${DISK_B}" -- \
 	mklabel gpt \
-	mkpart "${SWAP}" 1MB 100%; then
+	mkpart "${DATA}" 1MB 100%; then
 	printf '%s\n' "Partitioning disk ${DISK_B} failed" >&2
 	exit 2
 fi
@@ -107,7 +110,8 @@ udevadm trigger
 printf '%s' 'Waiting for partitions to appear...'
 while [ ! -e "/dev/disk/by-partlabel/${BOOT}" ] ||
 	[ ! -e "/dev/disk/by-partlabel/${MAIN}" ] ||
-	[ ! -e "/dev/disk/by-partlabel/${SWAP}" ]; do
+	[ ! -e "/dev/disk/by-partlabel/${SWAP}" ] ||
+	[ ! -e "/dev/disk/by-partlabel/${DATA}" ]; do
 	sleep 1
 	printf '%s' '.'
 done
@@ -144,13 +148,22 @@ if ! mkswap -L "${SWAP}" "/dev/disk/by-partlabel/${SWAP}"; then
 	exit 5
 fi
 
+printf '%s\n' "Formatting /dev/disk/by-partlabel/${DATA} with ext4"
+
+# ext4 for the data partition
+if ! ${MKFSEXT4} -L "${DATA}" "/dev/disk/by-partlabel/${DATA}"; then
+	printf '%s\n' "Formatting /dev/disk/by-partlabel/${DATA} failed" >&2
+	exit 6
+fi
+
 # force udev to reread filesystems
 udevadm trigger
 
 printf '%s' 'Waiting for filesystems to appear...'
 while [ ! -e "/dev/disk/by-label/${BOOT}" ] ||
 	[ ! -e "/dev/disk/by-label/${MAIN}" ] ||
-	[ ! -e "/dev/disk/by-label/${SWAP}" ]; do
+	[ ! -e "/dev/disk/by-label/${SWAP}" ] ||
+	[ ! -e "/dev/disk/by-label/${DATA}" ]; do
 	sleep 1
 	printf '%s' '.'
 done
@@ -165,7 +178,7 @@ printf '%s\n' 'Enabling swap'
 # enable swap already so installation can use more memory
 if ! swapon "/dev/disk/by-partlabel/${SWAP}"; then
 	printf '%s\n' 'Enabling swap failed' >&2
-	exit 6
+	exit 7
 fi
 
 printf '%s\n' 'Mounting filesystems'
@@ -175,7 +188,7 @@ if ! mount --types ext4 "/dev/disk/by-label/${MAIN}" /mnt/ ||
 	! mkdir --parents /mnt/boot/ ||
 	! mount --types vfat "/dev/disk/by-label/${BOOT}" /mnt/boot/; then
 	printf '%s\n' 'Mounting filesystems failed' >&2
-	exit 7
+	exit 8
 fi
 
 printf '%s\n' 'Copying age keys'
@@ -184,7 +197,7 @@ printf '%s\n' 'Copying age keys'
 if ! mkdir --parents "/mnt/var/lib/sops/age" ||
 	! cp "${keyfile}" "/mnt/var/lib/sops/age/keys.txt"; then
 	printf '%s\n' 'Copying age keys failed' >&2
-	exit 8
+	exit 9
 fi
 
 ### INSTALLATION ###
