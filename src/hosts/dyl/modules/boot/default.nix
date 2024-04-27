@@ -79,20 +79,20 @@
         # Use systemd-boot as bootloader
         enable = true;
 
-        memtest86 = {
-          # Enable memtest86 to be able to test RAM
-          enable = true;
-
-          # This is needed for correct ordering of boot entries
-          sortKey = "a_memtest86";
-        };
-
         netbootxyz = {
           # Enable netboot.xyz to be able to boot any OS from network
           enable = true;
 
           # This is needed for correct ordering of boot entries
-          sortKey = "a_netbootxyz";
+          sortKey = "z0_netbootxyz";
+        };
+
+        memtest86 = {
+          # Enable memtest86 to be able to test RAM
+          enable = true;
+
+          # This is needed for correct ordering of boot entries
+          sortKey = "z1_memtest86";
         };
       };
     };

@@ -65,10 +65,6 @@
       # Point to the GitHub repository as the source of truth
       flake = "github:radio-aktywne/systems#${config.constants.name}";
 
-      # Despite the name, this doesn't make the system reboot automatically
-      # This only builds the new generation and makes it available at the next boot
-      operation = "boot";
-
       # Don't persist run times
       persistent = false;
 
