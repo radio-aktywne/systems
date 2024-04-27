@@ -55,6 +55,7 @@
       ];
 
       perSystem = {
+        config,
         pkgs,
         system,
         ...
