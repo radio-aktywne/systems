@@ -6,6 +6,9 @@
 
       # use ext4 for root
       fsType = "ext4";
+
+      # It contains some data needed to set up the system (e.g. age keys)
+      neededForBoot = true;
     };
 
     "/boot" = {
