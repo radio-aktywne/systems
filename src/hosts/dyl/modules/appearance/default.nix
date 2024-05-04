@@ -1,25 +1,10 @@
 # Configuration related to visual appearance of the system
 {pkgs, ...}: {
   fonts = {
-    packages = [
-      # Roboto font from Google
-      pkgs.roboto
-
-      # Roboto Mono font patched with Nerd Font
-      (pkgs.nerdfonts.override {fonts = ["RobotoMono"];})
-
-      # Emoji font from Google
-      pkgs.noto-fonts-emoji
-    ];
-
     fontconfig = {
       defaultFonts = {
-        sansSerif = [
-          "Roboto"
-        ];
-
-        serif = [
-          "Roboto"
+        emoji = [
+          "Noto Color Emoji"
         ];
 
         monospace = [
@@ -29,11 +14,26 @@
           "Roboto Mono"
         ];
 
-        emoji = [
-          "Noto Color Emoji"
+        sansSerif = [
+          "Roboto"
+        ];
+
+        serif = [
+          "Roboto"
         ];
       };
     };
+
+    packages = [
+      # Emoji font from Google
+      pkgs.noto-fonts-emoji
+
+      # Roboto font from Google
+      pkgs.roboto
+
+      # Roboto Mono font patched with Nerd Font
+      (pkgs.nerdfonts.override {fonts = ["RobotoMono"];})
+    ];
   };
 
   services = {

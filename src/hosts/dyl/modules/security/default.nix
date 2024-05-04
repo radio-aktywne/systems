@@ -14,9 +14,6 @@
   };
 
   security = {
-    # Disable modifiying kernel image after boot
-    protectKernelImage = true;
-
     rtkit = {
       # Enable permissions for realtime scheduling
       enable = true;

@@ -1,5 +1,5 @@
 # Create NixOS configuration for given host
-# Additionally, configrations for virtual machine and install script are created
+# Additionally, create a virtual machine configuration and an install script
 {
   directory,
   host,

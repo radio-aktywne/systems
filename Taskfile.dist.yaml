@@ -138,26 +138,27 @@ tasks:
     desc: Build a target
     cmds:
       - >
-        nix
-        --accept-flake-config
-        --extra-experimental-features
-        'nix-command flakes'
-        --no-warn-dirty
-        build
-        --out-link
-        build
+        ./scripts/build.sh
         {{ .CLI_ARGS }}
   run:
     desc: Run a target
     interactive: true
     cmds:
       - >
-        nix
-        --accept-flake-config
-        --extra-experimental-features
-        'nix-command flakes'
-        --no-warn-dirty
-        run
+        ./scripts/run.sh
+        {{ .CLI_ARGS }}
+  vm:
+    desc: Run a virtual machine
+    interactive: true
+    cmds:
+      - >
+        ./scripts/vm.sh
+        {{ .CLI_ARGS }}
+  install:
+    desc: Install system on current machine
+    cmds:
+      - >
+        ./scripts/install.sh
         {{ .CLI_ARGS }}
   secret:
     desc: Edit secrets

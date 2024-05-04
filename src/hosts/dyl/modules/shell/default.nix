@@ -1,4 +1,4 @@
-# Enable shells
+# Shells configuration
 {
   environment = {
     pathsToLink = [

@@ -3,25 +3,40 @@
   config,
   pkgs,
   ...
-}: {
+}: let
+  script = pkgs.writeShellApplication {
+    # Name of the script
+    name = "motd";
+
+    # Packages available in the script
+    runtimeInputs = [pkgs.coreutils pkgs.lolcat];
+
+    # Load the script with substituted values
+    text = builtins.readFile (
+      # Substitute values in the script
+      pkgs.substituteAll {
+        # Use this file as source
+        src = ./motd.sh;
+
+        # Provide values to substitute
+        logo = pkgs.writeText "logo.txt" (builtins.readFile ./logo.txt);
+        motdfile = config.users.motdFile;
+      }
+    );
+  };
+in {
   systemd = {
     services = {
       # Create a service for changing the MOTD
       motd = {
         description = "Change the MOTD";
 
-        script = builtins.readFile (
-          pkgs.substituteAll {
-            src = ./motd.sh;
+        requires = [
+          # Require network to be online
+          "network-online.target"
+        ];
 
-            cat = "${pkgs.coreutils}/bin/cat";
-            logo = pkgs.writeText "logo.txt" (builtins.readFile ./logo.txt);
-            lolcat = "${pkgs.lolcat}/bin/lolcat";
-            mktemp = "${pkgs.coreutils}/bin/mktemp";
-            motdfile = config.users.motdFile;
-            rm = "${pkgs.coreutils}/bin/rm";
-          }
-        );
+        script = "${script}/bin/motd";
 
         serviceConfig = {
           # This is needed to format the output correctly
@@ -44,6 +59,7 @@
   };
 
   users = {
+    # Store MOTD in this file
     motdFile = "/etc/motd";
   };
 }

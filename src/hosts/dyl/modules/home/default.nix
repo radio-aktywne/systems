@@ -1,7 +1,7 @@
 # Home Manager configuration
 {inputs, ...}: {
   imports = [
-    # Import home-manager module
+    # Import home-manager modules
     inputs.home-manager.nixosModules.home-manager
   ];
 

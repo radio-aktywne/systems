@@ -159,7 +159,7 @@ If you want to try out any host configuration in a virtual machine,
 you can run:
 
 ```sh
-task run -- "./#$HOST-virtual-machine"
+task vm -- "$HOST"
 ```
 
 where `$HOST` is the name of the target machine.
