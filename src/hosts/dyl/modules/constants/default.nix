@@ -1,69 +1,9 @@
 # Reusable constants are defined here
 # All options have default values
-# You can use them in other modules
+# You can use these options in other modules
 {lib, ...}: {
   options = {
     constants = {
-      disks = {
-        a = {
-          partitions = {
-            boot = {
-              label = lib.mkOption {
-                default = "boot";
-                description = "Label for the boot partition";
-                type = lib.types.str;
-              };
-            };
-
-            main = {
-              label = lib.mkOption {
-                default = "main";
-                description = "Label for the main partition";
-                type = lib.types.str;
-              };
-            };
-
-            swap = {
-              label = lib.mkOption {
-                default = "swap";
-                description = "Label for the swap partition";
-                type = lib.types.str;
-              };
-
-              size = lib.mkOption {
-                default = 8192;
-                description = "Size of the swap partition in MB";
-                type = lib.types.int;
-              };
-            };
-          };
-
-          path = lib.mkOption {
-            default = "/dev/sdb";
-            description = "Path to the disk";
-            type = lib.types.path;
-          };
-        };
-
-        b = {
-          partitions = {
-            data = {
-              label = lib.mkOption {
-                default = "data";
-                description = "Label for the data partition";
-                type = lib.types.str;
-              };
-            };
-          };
-
-          path = lib.mkOption {
-            default = "/dev/sdc";
-            description = "Path to the disk";
-            type = lib.types.path;
-          };
-        };
-      };
-
       name = lib.mkOption {
         default = "dyl";
         description = "Name of the machine";
@@ -86,10 +26,32 @@
 
       secrets = {
         sops = {
-          keyFile = lib.mkOption {
-            default = "/var/lib/sops/age/keys.txt";
-            description = "Path to the age key file for SOPS";
-            type = lib.types.path;
+          age = {
+            file = lib.mkOption {
+              default = "/var/lib/sops/age/keys.txt";
+              description = "Path to the file with private age keys";
+              type = lib.types.str;
+            };
+          };
+        };
+      };
+
+      storage = {
+        disks = {
+          main = {
+            device = lib.mkOption {
+              default = "/dev/disk/by-id/wwn-0x6782bcb0067906002db969310e5584c6";
+              description = "Device path of the main disk";
+              type = lib.types.str;
+            };
+          };
+
+          data = {
+            device = lib.mkOption {
+              default = "/dev/disk/by-id/wwn-0x6782bcb0067906002db9694b0fdbd555";
+              description = "Device path of the data disk";
+              type = lib.types.str;
+            };
           };
         };
       };
@@ -104,36 +66,6 @@
         };
 
         disk = {
-          partitions = {
-            main = {
-              label = lib.mkOption {
-                default = "main";
-                description = "Label for the main partition";
-                type = lib.types.str;
-              };
-            };
-
-            swap = {
-              label = lib.mkOption {
-                default = "swap";
-                description = "Label for the swap partition";
-                type = lib.types.str;
-              };
-
-              size = lib.mkOption {
-                default = 1024;
-                description = "Size of the swap partition in MB";
-                type = lib.types.int;
-              };
-            };
-          };
-
-          path = lib.mkOption {
-            default = "/dev/vda";
-            description = "Path to the disk in the virtual machine";
-            type = lib.types.path;
-          };
-
           size = lib.mkOption {
             default = 8192;
             description = "Size of the disk in MB";
@@ -146,6 +78,20 @@
             default = 4096;
             description = "Size of the memory in MB";
             type = lib.types.int;
+          };
+        };
+
+        name = lib.mkOption {
+          default = "dyl-vm";
+          description = "Name of the virtual machine";
+          type = lib.types.str;
+        };
+
+        network = {
+          hostId = lib.mkOption {
+            default = "9827df51";
+            description = "Unique identifier for the virtual machine";
+            type = lib.types.str;
           };
         };
       };

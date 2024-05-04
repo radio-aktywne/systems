@@ -2,12 +2,12 @@
 {config, ...}: {
   programs = {
     git = {
-      enable = true;
-
       difftastic = {
         # Enable difftastic for better diffs
         enable = true;
       };
+
+      enable = true;
 
       signing = {
         # Use the configured gpg binary, because by default the one from pkgs is used

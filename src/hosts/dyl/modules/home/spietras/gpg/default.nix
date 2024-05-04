@@ -18,8 +18,8 @@
         {
           # Take the public key from GitHub
           source = pkgs.fetchurl {
-            url = "https://github.com/spietras.gpg";
             sha256 = "sha256-axZSBDWxJC6Xm9Q51Mctd9FihOHPQH1PnylwhS5SR30=";
+            url = "https://github.com/spietras.gpg";
           };
 
           # This is my key so I trust it fully
@@ -38,10 +38,10 @@
       # We need to setup the GPG agent sockets
       # When connecting to the server, use the sockets at /home/spietras/.gnupg/S.gpg-agent and /home/spietras/.gnupg/S.gpg-agent.ssh
       initExtra = let
-        gpgconf = "${config.programs.gpg.package}/bin/gpgconf";
         agentSocket = "${config.programs.gpg.homedir}/S.gpg-agent";
-        sshSocket = "${config.programs.gpg.homedir}/S.gpg-agent.ssh";
+        gpgconf = "${config.programs.gpg.package}/bin/gpgconf";
         ln = "${pkgs.coreutils}/bin/ln";
+        sshSocket = "${config.programs.gpg.homedir}/S.gpg-agent.ssh";
       in ''
         # Create the socket directory
         ${gpgconf} --create-socketdir

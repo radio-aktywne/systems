@@ -23,11 +23,15 @@ private keys on the target machine either in `~/.config/sops/age/keys.txt`
 or somewhere else with `SOPS_AGE_KEY_FILE` environment variable set.
 The installation script will copy the keys to persistent storage.
 
-Change the `HOST` variable to the name of the host device and run:
+Change the HOST variable to the name of the host configuration
+you want to install and run:
+
+<!-- markdownlint-disable line-length -->
 
 ```sh
-sudo nix --experimental-features 'nix-command flakes' \
-    run "github:radio-aktywne/systems#${HOST}-install-script"
+sudo nix --experimental-features 'nix-command flakes' run "github:radio-aktywne/systems#${HOST}-install-script"
 ```
+
+<!-- markdownlint-enable line-length -->
 
 and then reboot the machine.

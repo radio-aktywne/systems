@@ -24,22 +24,22 @@
 
     settings = {
       allowed-users = [
-        # Allow the wheel group (basically, all users with sudo access)
-        "@wheel"
-
         # Allow all normal users
         "@users"
+
+        # Allow the wheel group (basically, all users with sudo access)
+        "@wheel"
       ];
 
       # Enable automatic optimisation
       auto-optimise-store = true;
 
       experimental-features = [
-        # Enable commands
-        "nix-command"
-
         # Enable flakes
         "flakes"
+
+        # Enable commands
+        "nix-command"
       ];
     };
   };
@@ -50,7 +50,7 @@
       allowUnfree = true;
     };
 
-    # This is needed to specify the architecture of the system
+    # Specify the architecture of the system
     hostPlatform = config.constants.platform;
   };
 
@@ -73,7 +73,7 @@
       randomizedDelaySec = "1h";
     };
 
-    # This should just stay as is
-    stateVersion = "22.11";
+    # Keep this value as the NixOS version used during first installation
+    stateVersion = "23.11";
   };
 }

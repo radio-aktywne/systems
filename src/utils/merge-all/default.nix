@@ -1,4 +1,4 @@
-# Merge a list of attrsets into a single attrset.
+# Merge a list of attrsets into a single attrset
 {
   attrsets,
   inputs,

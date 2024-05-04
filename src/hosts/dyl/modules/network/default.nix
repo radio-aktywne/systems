@@ -6,10 +6,16 @@
       enable = false;
     };
 
+    # The identifier of the machine
     hostId = config.constants.network.hostId;
+
+    # The hostname of the machine
     hostName = config.constants.name;
 
     networkmanager = {
+      # Push DNS configuration to systemd-resolved
+      dns = "systemd-resolved";
+
       # Use NetworkManager to manage network connections
       enable = true;
     };

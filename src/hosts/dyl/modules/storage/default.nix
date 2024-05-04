@@ -1,28 +1,159 @@
 # Storage configuration
-{config, ...}: {
+{
+  config,
+  inputs,
+  ...
+}: {
+  imports = [
+    # Import Disko modules
+    inputs.disko.nixosModules.disko
+  ];
+
+  disko = {
+    devices = {
+      disk = {
+        data = {
+          content = {
+            partitions = {
+              data = {
+                content = {
+                  # This partition contains an LVM physical volume
+                  type = "lvm_pv";
+
+                  # Attach the partition to this volume group
+                  vg = "data";
+                };
+
+                # Use the whole disk for the data partition
+                size = "100%";
+
+                # Linux filesystem partition
+                type = "8300";
+              };
+            };
+
+            # Use GPT partition table
+            type = "gpt";
+          };
+
+          device = config.constants.storage.disks.data.device;
+          type = "disk";
+        };
+
+        main = {
+          content = {
+            partitions = {
+              boot = {
+                content = {
+                  # Format the partition as FAT
+                  format = "vfat";
+
+                  # Mount the partition at /boot
+                  mountpoint = "/boot";
+
+                  # This partition contains a filesystem
+                  type = "filesystem";
+                };
+
+                # Size of the boot partition
+                size = "1G";
+
+                # EFI system partition
+                type = "EF00";
+              };
+
+              main = {
+                content = {
+                  # This partition contains an LVM physical volume
+                  type = "lvm_pv";
+
+                  # Attach the partition to this volume group
+                  vg = "main";
+                };
+
+                # Use the rest of the disk for the main partition
+                size = "100%";
+
+                # Linux filesystem partition
+                type = "8300";
+              };
+            };
+
+            # Use GPT partition table
+            type = "gpt";
+          };
+
+          device = config.constants.storage.disks.main.device;
+          type = "disk";
+        };
+      };
+
+      lvm_vg = {
+        data = {
+          lvs = {
+            swap = {
+              content = {
+                # Enable encryption
+                randomEncryption = true;
+
+                # This volume contains a swap partition
+                type = "swap";
+              };
+
+              # Use 8 GB for swap
+              size = "8G";
+            };
+          };
+
+          type = "lvm_vg";
+        };
+
+        main = {
+          lvs = {
+            main = {
+              content = {
+                # Format the volume as ext4
+                format = "ext4";
+
+                # Mount the volume at /
+                mountpoint = "/";
+
+                # This volume contains a filesystem
+                type = "filesystem";
+              };
+
+              # Take all the space in the volume group
+              size = "100%FREE";
+            };
+          };
+
+          type = "lvm_vg";
+        };
+      };
+    };
+  };
+
   fileSystems = {
-    "/" = {
-      device = "/dev/disk/by-label/${config.constants.disks.a.partitions.main.label}";
-
-      # use ext4 for root
-      fsType = "ext4";
-
-      # It contains some data needed to set up the system (e.g. age keys)
+    "/boot" = {
+      # Obviously
       neededForBoot = true;
     };
 
-    "/boot" = {
-      device = "/dev/disk/by-label/${config.constants.disks.a.partitions.boot.label}";
-
-      # /boot uses FAT32, but mount only recognizes vfat type
-      fsType = "vfat";
-
-      # Obviously
+    "/" = {
+      # Contains data needed for booting
       neededForBoot = true;
     };
   };
 
   services = {
+    fstrim = {
+      # Enable automatic periodic TRIM
+      enable = true;
+
+      # TRIM once a week on Sunday at 3 AM
+      interval = "Sun, 03:00";
+    };
+
     smartd = {
       # Enable smartmontools daemon
       enable = true;
@@ -33,20 +164,4 @@
       ];
     };
   };
-
-  swapDevices = [
-    # One swap device on separate partition
-    {
-      # We need to use partlabel here, because regular label can change with encryption
-      device = "/dev/disk/by-partlabel/${config.constants.disks.a.partitions.swap.label}";
-
-      randomEncryption = {
-        # Allow TRIM requests to be sent to the swap device
-        allowDiscards = true;
-
-        # Enable encryption of swap
-        enable = true;
-      };
-    }
-  ];
 }
