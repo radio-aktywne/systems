@@ -29,6 +29,30 @@
       }
     ];
   };
+  fluxScript = pkgs.writeShellApplication {
+    # Name of the script
+    name = "flux";
+
+    # Packages available in the script
+    runtimeInputs = [pkgs.coreutils pkgs.fluxcd pkgs.k3s];
+
+    # Load the script with substituted values
+    text = builtins.readFile (
+      # Substitute values in the script
+      pkgs.substituteAll {
+        # Use this file as source
+        src = ./flux.sh;
+
+        # Provide values to substitute
+        keysFile = config.constants.secrets.sops.age.file;
+        kubeconfig = config.constants.kubernetes.files.kubeconfig;
+        sourceBranch = config.constants.kubernetes.flux.source.branch;
+        sourceIgnore = config.constants.kubernetes.flux.source.ignore;
+        sourcePath = config.constants.kubernetes.flux.source.path;
+        sourceUrl = config.constants.kubernetes.flux.source.url;
+      }
+    );
+  };
   kubeletConfig = yamlFormat.generate "kubelet.yaml" {
     apiVersion = "kubelet.config.k8s.io/v1beta1";
     kind = "KubeletConfiguration";
@@ -152,6 +176,36 @@ in {
 
       # Shared secret used by all nodes to join the cluster
       tokenFile = config.sops.secrets."k3s/token".path;
+    };
+  };
+
+  systemd = {
+    services = {
+      flux = {
+        after = [
+          # Run after k3s is running
+          "k3s.service"
+        ];
+
+        description = "Setup Flux";
+
+        requires = [
+          # Require k3s to be running
+          "k3s.service"
+        ];
+
+        serviceConfig = {
+          # Run only once at startup
+          Type = "oneshot";
+        };
+
+        script = "${fluxScript}/bin/flux";
+
+        wantedBy = [
+          # Run at startup
+          "multi-user.target"
+        ];
+      };
     };
   };
 }

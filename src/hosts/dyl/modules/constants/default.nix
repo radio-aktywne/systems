@@ -1,7 +1,11 @@
 # Reusable constants are defined here
 # All options have default values
 # You can use these options in other modules
-{lib, ...}: {
+{
+  config,
+  lib,
+  ...
+}: {
   options = {
     constants = {
       kubernetes = {
@@ -26,6 +30,34 @@
             default = "/etc/kubernetes/kubeconfig.yaml";
             description = "File to store the kubeconfig in";
             type = lib.types.path;
+          };
+        };
+
+        flux = {
+          source = {
+            branch = lib.mkOption {
+              default = "main";
+              description = "Branch of the Git repository";
+              type = lib.types.str;
+            };
+
+            ignore = lib.mkOption {
+              default = "";
+              description = "Paths to ignore in the repository";
+              type = lib.types.str;
+            };
+
+            path = lib.mkOption {
+              default = "src/clusters/${config.constants.kubernetes.cluster.name}";
+              description = "Path to the directory with manifests";
+              type = lib.types.str;
+            };
+
+            url = lib.mkOption {
+              default = "https://github.com/radio-aktywne/clusters";
+              description = "URL of the Git repository";
+              type = lib.types.str;
+            };
           };
         };
 
