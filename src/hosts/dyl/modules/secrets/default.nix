@@ -28,6 +28,9 @@
 
     # You need to explicitly list here all secrets you want to use
     secrets = {
+      "k3s/token" = {
+      };
+
       "passwords/root" = {
         # This is needed to make the secret available early enough
         neededForUsers = true;

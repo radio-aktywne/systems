@@ -4,6 +4,94 @@
 {lib, ...}: {
   options = {
     constants = {
+      kubernetes = {
+        cluster = {
+          name = lib.mkOption {
+            default = "main";
+            description = "Name of the Kubernetes cluster";
+            type = lib.types.str;
+          };
+        };
+
+        directories = {
+          state = lib.mkOption {
+            default = "/var/lib/kubernetes/k3s/";
+            description = "Directory to store state in";
+            type = lib.types.path;
+          };
+        };
+
+        files = {
+          kubeconfig = lib.mkOption {
+            default = "/etc/kubernetes/kubeconfig.yaml";
+            description = "File to store the kubeconfig in";
+            type = lib.types.path;
+          };
+        };
+
+        network = {
+          addresses = {
+            cluster = lib.mkOption {
+              default = "10.42.0.0/16";
+              description = "IP address allocation range for pods";
+              type = lib.types.str;
+            };
+
+            service = lib.mkOption {
+              default = "10.43.0.0/16";
+              description = "IP address allocation range for services";
+              type = lib.types.str;
+            };
+          };
+
+          interfaces = {
+            cni = lib.mkOption {
+              default = "cni0";
+              description = "Name of the CNI interface";
+              type = lib.types.str;
+            };
+          };
+
+          ports = {
+            api = lib.mkOption {
+              default = 6443;
+              description = "Port for API server";
+              type = lib.types.int;
+            };
+          };
+        };
+
+        resources = {
+          reserved = {
+            system = {
+              cpu = lib.mkOption {
+                default = "1000m";
+                description = "Reserved CPU for system";
+                type = lib.types.str;
+              };
+
+              memory = lib.mkOption {
+                default = "1Gi";
+                description = "Reserved memory for system";
+                type = lib.types.str;
+              };
+
+              pid = lib.mkOption {
+                default = 100;
+                description = "Reserved number of process IDs for system";
+                type = lib.types.int;
+              };
+
+              storage = lib.mkOption {
+                default = "10Gi";
+                description = "Reserved storage for system";
+                type = lib.types.str;
+              };
+            };
+          };
+        };
+      };
+
       name = lib.mkOption {
         default = "dyl";
         description = "Name of the machine";
