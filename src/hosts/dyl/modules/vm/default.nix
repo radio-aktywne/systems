@@ -7,6 +7,20 @@
   virtualisation = {
     vmVariant = {
       constants = {
+        kubernetes = {
+          resources = {
+            reserved = {
+              # Override reserved resources to adjust them for the virtual machine
+              system = {
+                cpu = "500m";
+                memory = "500Mi";
+                pid = 100;
+                storage = "500Mi";
+              };
+            };
+          };
+        };
+
         # Use a different name for the virtual machine
         name = config.virtualisation.vmVariant.constants.vm.name;
 
