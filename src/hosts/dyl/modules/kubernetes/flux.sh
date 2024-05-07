@@ -4,6 +4,7 @@
 
 KEYS_FILE='@keysFile@'
 KUBECONFIG='@kubeconfig@'
+NODE='@node@'
 SOURCE_BRANCH='@sourceBranch@'
 SOURCE_IGNORE='@sourceIgnore@'
 SOURCE_PATH='@sourcePath@'
@@ -69,11 +70,20 @@ fi
 
 printf '%s\n' 'Secret added'
 
+printf '%s\n' 'Adding node labels'
+
+if ! kubectl --kubeconfig "${KUBECONFIG}" label --overwrite node "${NODE}" 'node.longhorn.io/create-default-disk=true'; then
+	printf '%s\n' 'Node label addition failed' >&2
+	exit 6
+fi
+
+printf '%s\n' 'Node labels added'
+
 printf '%s\n' 'Creating source'
 
 if ! flux --kubeconfig "${KUBECONFIG}" create source git main --url "${SOURCE_URL}" --branch "${SOURCE_BRANCH}" --ignore-paths "${SOURCE_IGNORE}"; then
 	printf '%s\n' 'Flux source creation failed' >&2
-	exit 6
+	exit 7
 fi
 
 printf '%s\n' 'Source created'
@@ -82,7 +92,7 @@ printf '%s\n' 'Creating kustomization'
 
 if ! flux --kubeconfig "${KUBECONFIG}" create kustomization main --source main --path "${SOURCE_PATH}" --decryption-provider sops --decryption-secret sops-keys --prune --wait; then
 	printf '%s\n' 'Flux kustomization creation failed' >&2
-	exit 7
+	exit 8
 fi
 
 printf '%s\n' 'Kustomization created'

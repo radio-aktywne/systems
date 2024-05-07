@@ -131,6 +131,22 @@
       };
 
       network = {
+        domain = {
+          root = lib.mkOption {
+            default = "radioaktywne.pl";
+            description = "Our root domain";
+            type = lib.types.str;
+          };
+
+          subdomains = {
+            network = lib.mkOption {
+              default = "network";
+              description = "Subdomain for network";
+              type = lib.types.str;
+            };
+          };
+        };
+
         hostId = lib.mkOption {
           default = "d2010ee8";
           description = "Unique identifier for the machine";
