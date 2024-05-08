@@ -103,9 +103,15 @@ in {
       allowedTCPPorts = [
         # Allow Kubernetes API server
         config.constants.kubernetes.network.ports.api
+
+        # Allow memberlist traffic (used by MetalLB)
+        config.constants.kubernetes.network.ports.memberlist
       ];
 
       allowedUDPPorts = [
+        # Allow memberlist traffic (used by MetalLB)
+        config.constants.kubernetes.network.ports.memberlist
+
         # Allow WireGuard (IPv4)
         51820
 

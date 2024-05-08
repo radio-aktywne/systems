@@ -90,6 +90,12 @@
               description = "Port for API server";
               type = lib.types.int;
             };
+
+            memberlist = lib.mkOption {
+              default = 7946;
+              description = "Port for memberlist traffic (used by MetalLB)";
+              type = lib.types.int;
+            };
           };
         };
 
