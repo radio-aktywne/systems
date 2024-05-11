@@ -14,6 +14,13 @@
   };
 
   security = {
+    pki = {
+      certificateFiles = [
+        # Add self-signed root certificate
+        ./ca.crt
+      ];
+    };
+
     rtkit = {
       # Enable permissions for realtime scheduling
       enable = true;
