@@ -53,6 +53,22 @@
           };
         };
       };
+
+      twarowskiw = {
+        openssh = {
+          authorizedKeys = {
+            # Take public keys from GitHub
+            keys = lib.strings.splitString "\n" (
+              builtins.readFile (
+                pkgs.fetchurl {
+                  sha256 = "sha256-6ni9tVKiYhI/CsTTiK+r/DywaECf6vKCrA0mqp3IhSE=";
+                  url = "https://github.com/twarowskiw.keys";
+                }
+              )
+            );
+          };
+        };
+      };
     };
   };
 }
