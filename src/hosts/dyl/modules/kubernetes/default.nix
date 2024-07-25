@@ -61,8 +61,6 @@
     imageGCHighThresholdPercent = 50;
     # Don't remove unused images if they take up less than 10% of the storage
     imageGCLowThresholdPercent = 10;
-    # Delete unused images after 7 days
-    imageMaximumGCAge = "7d";
     systemReserved = {
       # Reserved CPU for system
       cpu = "${config.constants.kubernetes.resources.reserved.system.cpu}";
