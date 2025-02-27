@@ -61,7 +61,7 @@
             keys = lib.strings.splitString "\n" (
               builtins.readFile (
                 pkgs.fetchurl {
-                  sha256 = "sha256-UvjWX2shgR/LiSnXvr2w6FXJlJd9FmM3JmguKrxnbgQ=";
+                  sha256 = "sha256-dIHIMyTlENmE2X13x3sh9hRxNwm3wk6/La+izH3jMd8=";
                   url = "https://github.com/twarowskiw.keys";
                 }
               )

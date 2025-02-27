@@ -7,8 +7,11 @@
     };
 
     zsh = {
+      autosuggestion = {
+        enable = true;
+      };
+
       enable = true;
-      enableAutosuggestions = true;
       enableCompletion = true;
       enableVteIntegration = true;
 

@@ -18,7 +18,7 @@
         {
           # Take the public key from GitHub
           source = pkgs.fetchurl {
-            sha256 = "sha256-DosegcJ9v+xahLEOmqVScOVuO8u4+Ms8EUU6+FLis4A=";
+            sha256 = "sha256-XqQIDqkKk3kfdwOhs9tpwR7vjxwgfIdV6UF2vR/aKLU=";
             url = "https://github.com/twarowskiw.gpg";
           };
 
