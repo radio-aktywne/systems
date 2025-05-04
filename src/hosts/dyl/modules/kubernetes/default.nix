@@ -132,8 +132,8 @@ in {
 
   services = {
     k3s = {
-      # Temporarily disable k3s
-      enable = false;
+      # Enable k3s
+      enable = true;
 
       extraFlags = lib.strings.concatStringsSep " " [
         # Specify IP address allocation range for pods
@@ -217,9 +217,6 @@ in {
         ];
 
         description = "Setup Flux";
-
-        # Temporarily disable flux
-        enable = false;
 
         requires = [
           # Require k3s to be running
