@@ -182,7 +182,7 @@
         disks = {
           main = {
             device = lib.mkOption {
-              default = "/dev/disk/by-id/wwn-0x6782bcb0067906002db969310e5584c6";
+              default = "/dev/disk/by-id/wwn-0x6782bcb0067906002faa9aed07d97c8a";
               description = "Device path of the main disk";
               type = lib.types.str;
             };
@@ -190,7 +190,7 @@
 
           data = {
             device = lib.mkOption {
-              default = "/dev/disk/by-id/wwn-0x6782bcb0067906002db9694b0fdbd555";
+              default = "/dev/disk/by-id/wwn-0x6782bcb0067906002faaa09d05726f6e";
               description = "Device path of the data disk";
               type = lib.types.str;
             };
