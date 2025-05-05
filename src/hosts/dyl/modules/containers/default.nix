@@ -1,5 +1,13 @@
 # Containerisation
 {
+  users = {
+    groups = {
+      # Create docker group
+      docker = {
+      };
+    };
+  };
+
   virtualisation = {
     docker = {
       autoPrune = {
