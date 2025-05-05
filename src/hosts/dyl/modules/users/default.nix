@@ -20,6 +20,9 @@
           # Can use docker
           "docker"
 
+          # Can use kubernetes
+          "kubernetes"
+
           # Can use sudo
           "wheel"
         ];
@@ -39,6 +42,9 @@
         extraGroups = [
           # Can use docker
           "docker"
+
+          # Can use kubernetes
+          "kubernetes"
 
           # Can use sudo
           "wheel"
