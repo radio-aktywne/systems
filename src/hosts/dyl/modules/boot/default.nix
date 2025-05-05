@@ -24,6 +24,11 @@
 
     kernel = {
       sysctl = {
+        # Increase file watcher limits
+        "fs.inotify.max_user_watches" = 524288;
+        "fs.inotify.max_user_instances" = 1024;
+        "fs.inotify.max_queued_events" = 65536;
+
         # Enable SysRq
         # But only for logging level, keyboard, sync, remount, signals and reboot
         "kernel.sysrq" = 244;
