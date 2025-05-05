@@ -6,7 +6,6 @@
   ...
 }: let
   jsonFormat = pkgs.formats.json {};
-  yamlFormat = pkgs.formats.yaml {};
   flannelCniConfig = jsonFormat.generate "flannel-cni.json" {
     cniVersion = "1.0.0";
 
@@ -53,27 +52,6 @@
         sourceUrl = config.constants.kubernetes.flux.source.url;
       }
     );
-  };
-  kubeletConfig = yamlFormat.generate "kubelet.yaml" {
-    apiVersion = "kubelet.config.k8s.io/v1beta1";
-    kind = "KubeletConfiguration";
-    # Always remove unused images if they take up more than 50% of the storage
-    imageGCHighThresholdPercent = 50;
-    # Don't remove unused images if they take up less than 10% of the storage
-    imageGCLowThresholdPercent = 10;
-    systemReserved = {
-      # Reserved CPU for system
-      cpu = "${config.constants.kubernetes.resources.reserved.system.cpu}";
-
-      # Reserved storage for system
-      ephemeral-storage = "${config.constants.kubernetes.resources.reserved.system.storage}";
-
-      # Reserved memory for system
-      memory = "${config.constants.kubernetes.resources.reserved.system.memory}";
-
-      # Reserved number of process IDs for system
-      pid = "${toString config.constants.kubernetes.resources.reserved.system.pid}";
-    };
   };
   reversedDomain = lib.strings.concatStringsSep "." (lib.lists.reverseList (lib.strings.splitString "." config.constants.network.domain.root));
 in {
@@ -172,9 +150,6 @@ in {
         # Specify port for the API server
         "--https-listen-port ${toString config.constants.kubernetes.network.ports.api}"
 
-        # Pass configuration to kubelet
-        "--kubelet-arg '--config=${kubeletConfig}'"
-
         # Set node name explicitly
         "--node-name ${config.constants.name}"
 
@@ -191,6 +166,26 @@ in {
         # Create kubeconfig file for local access
         "--write-kubeconfig ${config.constants.kubernetes.files.kubeconfig}"
       ];
+
+      extraKubeletConfig = {
+        # Always remove unused images if they take up more than 50% of the storage
+        imageGCHighThresholdPercent = 50;
+        # Don't remove unused images if they take up less than 10% of the storage
+        imageGCLowThresholdPercent = 10;
+        systemReserved = {
+          # Reserved CPU for system
+          cpu = "${config.constants.kubernetes.resources.reserved.system.cpu}";
+
+          # Reserved storage for system
+          ephemeral-storage = "${config.constants.kubernetes.resources.reserved.system.storage}";
+
+          # Reserved memory for system
+          memory = "${config.constants.kubernetes.resources.reserved.system.memory}";
+
+          # Reserved number of process IDs for system
+          pid = "${toString config.constants.kubernetes.resources.reserved.system.pid}";
+        };
+      };
 
       # Use this device as the k3s server
       role = "server";
