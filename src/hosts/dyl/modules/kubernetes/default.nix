@@ -150,6 +150,9 @@ in {
         # Specify port for the API server
         "--https-listen-port ${toString config.constants.kubernetes.network.ports.api}"
 
+        # Remove terminated pods if there are too many
+        "--kube-controller-manager-arg '--terminated-pod-gc-threshold=10'"
+
         # Set node name explicitly
         "--node-name ${config.constants.name}"
 
@@ -185,6 +188,11 @@ in {
           # Reserved number of process IDs for system
           pid = "${toString config.constants.kubernetes.resources.reserved.system.pid}";
         };
+      };
+
+      gracefulNodeShutdown = {
+        # Enable graceful shutdown
+        enable = true;
       };
 
       # Use this device as the k3s server
