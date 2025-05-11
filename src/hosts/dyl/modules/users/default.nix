@@ -18,10 +18,10 @@
 
         extraGroups = [
           # Can use docker
-          "docker"
+          config.users.groups.docker.name
 
           # Can use kubernetes
-          "kubernetes"
+          config.users.groups.kubernetes.name
 
           # Can use sudo
           "wheel"
@@ -41,10 +41,10 @@
 
         extraGroups = [
           # Can use docker
-          "docker"
+          config.users.groups.docker.name
 
           # Can use kubernetes
-          "kubernetes"
+          config.users.groups.kubernetes.name
 
           # Can use sudo
           "wheel"

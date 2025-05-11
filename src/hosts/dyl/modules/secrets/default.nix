@@ -29,6 +29,8 @@
     # You need to explicitly list here all secrets you want to use
     secrets = {
       "k3s/token" = {
+        group = config.users.groups.kubernetes.name;
+        mode = "0440";
       };
 
       "passwords/root" = {
