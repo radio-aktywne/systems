@@ -65,22 +65,11 @@
       # Colors helper
       pkgs.pastel
 
-      # Send files to other devices
-      pkgs.portal
-
       # Speedtest CLI
       pkgs.speedtest-go
 
       # sysctl on steroids
       pkgs.systeroid
-
-      # Trash management
-      (
-        pkgs.trashy.overrideAttrs (f: p: {
-          # Disable installing completions because they are broken
-          preFixup = "";
-        })
-      )
 
       # Share the terminal over the web
       pkgs.ttyd
@@ -99,9 +88,6 @@
 
       # HTTPie alternative
       pkgs.xh
-
-      # Pretty resource viewer
-      pkgs.zfxtop
     ];
 
     shellAliases = {
@@ -227,13 +213,6 @@
     # Task scheduler
     pueue = {
       enable = true;
-
-      # It's empty, but it's required
-      settings = {
-        client = {};
-        daemon = {};
-        shared = {};
-      };
     };
   };
 }
