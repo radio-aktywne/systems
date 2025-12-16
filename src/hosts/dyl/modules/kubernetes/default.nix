@@ -6,6 +6,18 @@
   ...
 }: let
   jsonFormat = pkgs.formats.json {};
+  flannelConfig = jsonFormat.generate "flannel.json" {
+    Backend = {
+      # Use persistent keepalives
+      PersistentKeepaliveInterval = 25;
+
+      # Use WireGuard backend
+      Type = "wireguard";
+    };
+
+    # Specify IP address allocation range for pods
+    Network = config.constants.kubernetes.network.addresses.cluster;
+  };
   flannelCniConfig = jsonFormat.generate "flannel-cni.json" {
     cniVersion = "1.0.0";
 
@@ -38,11 +50,7 @@
     # Load the script with substituted values
     text = builtins.readFile (
       # Substitute values in the script
-      pkgs.substituteAll {
-        # Use this file as source
-        src = ./flux.sh;
-
-        # Provide values to substitute
+      pkgs.replaceVars ./flux.sh {
         keysFile = config.constants.secrets.sops.age.file;
         kubeconfig = config.constants.kubernetes.files.kubeconfig;
         node = config.constants.name;
@@ -111,6 +119,9 @@ in {
       trustedInterfaces = [
         # Allow all traffic on CNI interface
         config.constants.kubernetes.network.interfaces.cni
+
+        # Allow all traffic on Flannel interface (IPv4)
+        "flannel-wg"
       ];
     };
   };
@@ -148,8 +159,11 @@ in {
         # Disable network policy
         "--disable-network-policy"
 
-        # Use WireGuard for Container Network Interface
+        # Use WireGuard backend for Flannel
         "--flannel-backend wireguard-native"
+
+        # Use custom Flannel configuration
+        "--flannel-conf ${flannelConfig}"
 
         # Use custom CNI configuration
         "--flannel-cni-conf ${flannelCniConfig}"

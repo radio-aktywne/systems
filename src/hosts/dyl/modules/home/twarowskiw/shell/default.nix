@@ -1,5 +1,9 @@
 # Shell configuration
-{config, ...}: {
+{
+  config,
+  lib,
+  ...
+}: {
   programs = {
     starship = {
       enable = true;
@@ -38,7 +42,7 @@
         ];
       };
 
-      initExtraFirst = ''
+      initContent = lib.mkBefore ''
         # Create history file if it doesn't exist, because McFly crashes otherwise
         touch "${config.programs.zsh.history.path}"
       '';

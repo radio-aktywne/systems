@@ -32,7 +32,7 @@
       pkgs.roboto
 
       # Roboto Mono font patched with Nerd Font
-      (pkgs.nerdfonts.override {fonts = ["RobotoMono"];})
+      pkgs.nerd-fonts.roboto-mono
     ];
   };
 

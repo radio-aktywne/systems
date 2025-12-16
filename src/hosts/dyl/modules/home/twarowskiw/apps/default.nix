@@ -5,8 +5,14 @@
       # Bandwidth usage TUI
       pkgs.bandwhich
 
+      # Terminal graphics
+      pkgs.chafa
+
       # Displaying CPU information
       pkgs.cpufetch
+
+      # Send files to other devices
+      pkgs.croc
 
       # Containers TUI
       pkgs.ctop
@@ -35,6 +41,12 @@
       # Disk usage analyzer
       pkgs.gdu
 
+      # ImageMagick alternative
+      pkgs.graphicsmagick
+
+      # Benchmarking tool
+      pkgs.hyperfine
+
       # Interactive jq playground
       pkgs.jqp
 
@@ -47,11 +59,32 @@
       # Data manipulation
       pkgs.miller
 
+      # Serve files
+      pkgs.nodePackages.serve
+
+      # Colors helper
+      pkgs.pastel
+
+      # Speedtest CLI
+      pkgs.speedtest-go
+
       # sysctl on steroids
       pkgs.systeroid
 
+      # Share the terminal over the web
+      pkgs.ttyd
+
+      # Interactive pipe playground
+      pkgs.up
+
+      # Secure terminal sharing
+      pkgs.upterm
+
       # Universal SQL client
       pkgs.usql
+
+      # Record terminal sessions as GIFs
+      pkgs.vhs
 
       # HTTPie alternative
       pkgs.xh
@@ -132,13 +165,53 @@
       enableZshIntegration = true;
     };
 
+    # File manager
+    nnn = {
+      enable = true;
+    };
+
     # Better grep
     ripgrep = {
       enable = true;
     };
 
+    # TLDR
+    tealdeer = {
+      enable = true;
+
+      settings = {
+        updates = {
+          # Enable automatic updates
+          auto_update = true;
+        };
+      };
+    };
+
+    # Google Translate CLI
+    translate-shell = {
+      enable = true;
+    };
+
+    # YouTube downloader
+    yt-dlp = {
+      enable = true;
+    };
+
     # Modern terminal multiplexer
     zellij = {
+      enable = true;
+    };
+
+    # Smart cd
+    zoxide = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+  };
+
+  services = {
+    # Task scheduler
+    pueue = {
       enable = true;
     };
   };
