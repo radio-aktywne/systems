@@ -21,7 +21,6 @@
         host = config.constants.name;
         keysFile = config.constants.secrets.sops.age.file;
         mainDiskDevice = config.constants.storage.disks.main.device;
-        dataDiskDevice = config.constants.storage.disks.data.device;
       }
     );
   };

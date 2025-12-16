@@ -36,8 +36,8 @@
 
     zsh = {
       # We need to setup the GPG agent sockets
-      # When connecting to the server, use the sockets at /home/spietras/.gnupg/S.gpg-agent and /home/spietras/.gnupg/S.gpg-agent.ssh
-      initExtra = let
+      # When connecting to the server, use the sockets at ~/.gnupg/S.gpg-agent and ~/.gnupg/S.gpg-agent.ssh
+      initContent = let
         agentSocket = "${config.programs.gpg.homedir}/S.gpg-agent";
         gpgconf = "${config.programs.gpg.package}/bin/gpgconf";
         ln = "${pkgs.coreutils}/bin/ln";

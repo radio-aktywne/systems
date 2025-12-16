@@ -14,11 +14,7 @@
     # Load the script with substituted values
     text = builtins.readFile (
       # Substitute values in the script
-      pkgs.substituteAll {
-        # Use this file as source
-        src = ./motd.sh;
-
-        # Provide values to substitute
+      pkgs.replaceVars ./motd.sh {
         logo = pkgs.writeText "logo.txt" (builtins.readFile ./logo.txt);
         motdfile = config.users.motdFile;
       }

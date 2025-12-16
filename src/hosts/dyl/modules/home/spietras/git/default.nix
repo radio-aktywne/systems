@@ -10,9 +10,6 @@
       enable = true;
 
       signing = {
-        # Use the configured gpg binary, because by default the one from pkgs is used
-        gpgPath = "${config.programs.gpg.package}/bin/gpg";
-
         # Find gpg key by email address
         key = config.programs.git.userEmail;
 

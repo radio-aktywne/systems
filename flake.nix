@@ -1,7 +1,7 @@
 {
   inputs = {
     nixpkgs = {
-      url = "github:NixOS/nixpkgs/nixos-24.11";
+      url = "github:NixOS/nixpkgs/nixos-25.05";
     };
 
     disko = {
@@ -19,7 +19,7 @@
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
+      url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -47,7 +47,7 @@
       flake = inputs.utils.mkHosts {
         inherit inputs;
         directory = "hosts";
-        hosts = ["dyl"];
+        hosts = ["dummy" "dyl"];
       };
 
       # Sensible defaults
@@ -65,12 +65,13 @@
         system,
         ...
       }: let
+        nix = pkgs.nix;
         node = pkgs.nodejs;
         nil = pkgs.nil;
         task = pkgs.go-task;
         coreutils = pkgs.coreutils;
         trunk = pkgs.trunk-io;
-        copier = pkgs.copier;
+        copier = pkgs.python313.withPackages (ps: [ps.copier]);
         sops = pkgs.sops;
       in {
         # Override pkgs argument
@@ -95,6 +96,7 @@
             name = "dev";
 
             packages = [
+              nix
               node
               nil
               task
@@ -109,24 +111,11 @@
             '';
           };
 
-          template = pkgs.mkShell {
-            name = "template";
-
-            packages = [
-              task
-              coreutils
-              copier
-            ];
-
-            shellHook = ''
-              export TMPDIR=/tmp
-            '';
-          };
-
           lint = pkgs.mkShell {
             name = "lint";
 
             packages = [
+              nix
               node
               task
               coreutils
