@@ -15,7 +15,7 @@ SOURCE_URL='@sourceUrl@'
 printf '%s\n' 'Waiting for DNS to be ready'
 
 for i in $(seq 1 300); do
-	pods="$(kubectl --kubeconfig "${KUBECONFIG}" get pods --namespace kube-system --selector k8s-app=kube-dns --template='{{.items | len}}')"
+	pods="$(kubectl --kubeconfig "${KUBECONFIG}" get pods --namespace kube-system --selector k8s-app=kube-dns --field-selector status.phase=Running --template='{{.items | len}}')"
 
 	if [[ ${pods} -gt 0 ]]; then
 		break
@@ -29,7 +29,7 @@ for i in $(seq 1 300); do
 	sleep 1
 done
 
-if ! kubectl --kubeconfig "${KUBECONFIG}" wait --for condition=ready pods --namespace kube-system --selector k8s-app=kube-dns >/dev/null; then
+if ! kubectl --kubeconfig "${KUBECONFIG}" wait --for condition=ready pods --namespace kube-system --selector k8s-app=kube-dns --field-selector status.phase=Running >/dev/null; then
 	printf '%s\n' 'DNS not ready' >&2
 	exit 1
 fi
