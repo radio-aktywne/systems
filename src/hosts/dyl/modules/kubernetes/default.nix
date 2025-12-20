@@ -218,6 +218,11 @@ in {
         enable = true;
       };
 
+      # Versioned k3s package to use
+      # Update incrementally, one minor version at a time
+      # See: https://kubernetes.io/releases/version-skew-policy
+      package = pkgs.k3s_1_33;
+
       # Use this device as the k3s server
       role = "server";
 
