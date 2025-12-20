@@ -65,11 +65,13 @@
       # Point to the GitHub repository as the source of truth
       flake = "github:radio-aktywne/systems#${config.constants.name}";
 
+      # Make new version available for next boot
+      operation = "boot";
+
       # Don't persist run times
       persistent = false;
 
-      # Introduce some randomness to avoid regular network traffic spikes
-      # This means that the update will be checked at a random time between 04:00 and 05:00
+      # Introduce some random delay to avoid regular network traffic spikes
       randomizedDelaySec = "1h";
     };
 
