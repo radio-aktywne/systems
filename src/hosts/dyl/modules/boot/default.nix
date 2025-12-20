@@ -74,8 +74,8 @@
 
     loader = {
       systemd-boot = {
-        # Keep maximum 5 previous generations
-        configurationLimit = 5;
+        # Keep up to 10 boot entries
+        configurationLimit = 10;
 
         # Try to autodetect the best resolution
         consoleMode = "auto";
