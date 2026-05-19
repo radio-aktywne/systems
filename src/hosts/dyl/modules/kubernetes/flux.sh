@@ -2,13 +2,11 @@
 
 ### CONFIGURATION ###
 
-KEYS_FILE='@keysFile@'
+INSTANCE_MANIFEST_FILE='@instanceManifestFile@'
 KUBECONFIG='@kubeconfig@'
 NODE='@node@'
-SOURCE_BRANCH='@sourceBranch@'
-SOURCE_IGNORE='@sourceIgnore@'
-SOURCE_PATH='@sourcePath@'
-SOURCE_URL='@sourceUrl@'
+OPERATOR_VERSION='@operatorVersion@'
+SOPS_KEYS_FILE='@sopsKeysFile@'
 
 ### MAIN ###
 
@@ -29,43 +27,32 @@ for i in $(seq 1 300); do
 	sleep 1
 done
 
-if ! kubectl --kubeconfig "${KUBECONFIG}" wait --for condition=ready pods --namespace kube-system --selector k8s-app=kube-dns --field-selector status.phase=Running >/dev/null; then
+if ! kubectl --kubeconfig "${KUBECONFIG}" wait --for condition=Ready --timeout 5m --namespace kube-system pods --selector k8s-app=kube-dns --field-selector status.phase=Running >/dev/null; then
 	printf '%s\n' 'DNS not ready' >&2
 	exit 1
 fi
 
 printf '%s\n' 'DNS ready'
 
-printf '%s\n' 'Running checks for Flux'
+printf '%s\n' 'Installing Flux Operator'
 
-if ! flux --kubeconfig "${KUBECONFIG}" check --pre; then
-	printf '%s\n' 'Flux pre-check failed' >&2
+if ! helm --kubeconfig "${KUBECONFIG}" upgrade --install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator --version "${OPERATOR_VERSION}" --namespace flux-system --create-namespace --set apiPriority.enabled=true --wait; then
+	printf '%s\n' 'Flux Operator installation failed' >&2
 	exit 2
 fi
 
-printf '%s\n' 'Checks passed'
-
-printf '%s\n' 'Installing Flux'
-
-if ! flux --kubeconfig "${KUBECONFIG}" install; then
-	printf '%s\n' 'Flux installation failed' >&2
-	exit 3
-fi
-
-printf '%s\n' 'Flux installed'
+printf '%s\n' 'Flux Operator installed'
 
 printf '%s\n' 'Adding SOPS keys secret'
 
-if ! manifest="$(kubectl --kubeconfig "${KUBECONFIG}" create secret generic sops-keys --namespace flux-system --from-file "sops.agekey=${KEYS_FILE}" --dry-run=client --save-config --output yaml)"; then
+if ! manifest="$(kubectl --kubeconfig "${KUBECONFIG}" create secret generic sops-keys --namespace flux-system --from-file "sops.agekey=${SOPS_KEYS_FILE}" --dry-run=client --save-config --output yaml)"; then
 	printf '%s\n' 'Secret manifest creation failed' >&2
-	exit 4
+	exit 3
 fi
 
-if ! kubectl --kubeconfig "${KUBECONFIG}" apply --filename - <<EOF; then
-${manifest}
-EOF
+if ! kubectl --kubeconfig "${KUBECONFIG}" apply --filename <(printf '%s' "${manifest}"); then
 	printf '%s\n' 'Secret creation failed' >&2
-	exit 5
+	exit 4
 fi
 
 printf '%s\n' 'Secret added'
@@ -74,25 +61,25 @@ printf '%s\n' 'Adding node labels'
 
 if ! kubectl --kubeconfig "${KUBECONFIG}" label --overwrite node "${NODE}" 'node.longhorn.io/create-default-disk=true'; then
 	printf '%s\n' 'Node label addition failed' >&2
-	exit 6
+	exit 5
 fi
 
 printf '%s\n' 'Node labels added'
 
-printf '%s\n' 'Creating source'
+printf '%s\n' 'Creating Flux instance'
 
-if ! flux --kubeconfig "${KUBECONFIG}" create source git main --url "${SOURCE_URL}" --branch "${SOURCE_BRANCH}" --ignore-paths "${SOURCE_IGNORE}"; then
-	printf '%s\n' 'Flux source creation failed' >&2
+if ! kubectl --kubeconfig "${KUBECONFIG}" apply --filename "${INSTANCE_MANIFEST_FILE}"; then
+	printf '%s\n' 'Flux instance creation failed' >&2
+	exit 6
+fi
+
+printf '%s\n' 'Flux instance created'
+
+printf '%s\n' 'Waiting for Flux instance to become ready'
+
+if ! kubectl --kubeconfig "${KUBECONFIG}" wait --for condition=Ready --timeout 5m --namespace flux-system fluxinstance/flux >/dev/null; then
+	printf '%s\n' 'Flux instance not ready' >&2
 	exit 7
 fi
 
-printf '%s\n' 'Source created'
-
-printf '%s\n' 'Creating kustomization'
-
-if ! flux --kubeconfig "${KUBECONFIG}" create kustomization main --source main --path "${SOURCE_PATH}" --decryption-provider sops --decryption-secret sops-keys --prune --wait; then
-	printf '%s\n' 'Flux kustomization creation failed' >&2
-	exit 8
-fi
-
-printf '%s\n' 'Kustomization created'
+printf '%s\n' 'Flux instance ready'

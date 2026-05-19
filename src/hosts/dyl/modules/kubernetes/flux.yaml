@@ -1,0 +1,73 @@
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+metadata:
+  name: flux
+  namespace: flux-system
+spec:
+  distribution:
+    registry: ghcr.io/fluxcd
+    version: "@version@"
+  sync:
+    kind: GitRepository
+    url: "@sourceUrl@"
+    ref: "refs/heads/@sourceBranch@"
+    path: "@sourcePath@"
+    name: main
+  kustomize:
+    patches:
+      - target:
+          group: apps
+          kind: Deployment
+          name: (kustomize-controller|helm-controller|source-controller)
+        patch: |-
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --concurrent=32
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --requeue-dependency=5s
+      - target:
+          group: apps
+          kind: Deployment
+          name: (kustomize-controller|helm-controller|source-controller)
+        patch: |-
+          kind: .
+          metadata:
+            name: .
+          spec:
+            template:
+              spec:
+                containers:
+                  - name: manager
+                    resources:
+                      limits:
+                        cpu: null
+      - target:
+          group: apps
+          kind: Deployment
+          name: kustomize-controller
+        patch: |-
+          kind: .
+          metadata:
+            name: .
+          spec:
+            template:
+              spec:
+                volumes:
+                  - name: temp
+                    emptyDir:
+                      medium: Memory
+      - target:
+          group: apps
+          kind: Deployment
+          name: source-controller
+        patch: |-
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --helm-cache-max-size=16
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --helm-cache-ttl=60m
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --helm-cache-purge-interval=5m

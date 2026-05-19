@@ -45,19 +45,23 @@
     name = "flux";
 
     # Packages available in the script
-    runtimeInputs = [pkgs.coreutils pkgs.fluxcd pkgs.k3s];
+    runtimeInputs = [config.services.k3s.package pkgs.coreutils pkgs.kubernetes-helm];
 
     # Load the script with substituted values
     text = builtins.readFile (
       # Substitute values in the script
       pkgs.replaceVars ./flux.sh {
-        keysFile = config.constants.secrets.sops.age.file;
+        instanceManifestFile = pkgs.replaceVars ./flux.yaml {
+          sourceBranch = config.constants.kubernetes.flux.source.branch;
+          sourcePath = config.constants.kubernetes.flux.source.path;
+          sourceUrl = config.constants.kubernetes.flux.source.url;
+          version = config.constants.kubernetes.flux.version;
+        };
+
         kubeconfig = config.constants.kubernetes.files.kubeconfig;
         node = config.constants.name;
-        sourceBranch = config.constants.kubernetes.flux.source.branch;
-        sourceIgnore = config.constants.kubernetes.flux.source.ignore;
-        sourcePath = config.constants.kubernetes.flux.source.path;
-        sourceUrl = config.constants.kubernetes.flux.source.url;
+        operatorVersion = config.constants.kubernetes.flux.operator.version;
+        sopsKeysFile = config.constants.secrets.sops.age.file;
       }
     );
   };
@@ -79,8 +83,9 @@ in {
     '';
 
     systemPackages = [
-      # Install flux CLI
+      # Install flux CLI and flux-operator CLI
       pkgs.fluxcd
+      pkgs.fluxcd-operator
 
       # Install kubectl
       pkgs.kubectl
@@ -218,10 +223,8 @@ in {
         enable = true;
       };
 
-      # Versioned k3s package to use
-      # Update incrementally, one minor version at a time
-      # See: https://kubernetes.io/releases/version-skew-policy
-      package = pkgs.k3s_1_33;
+      # Package to use for k3s
+      package = config.constants.kubernetes.package;
 
       # Use this device as the k3s server
       role = "server";
