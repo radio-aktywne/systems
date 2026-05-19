@@ -4,6 +4,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }: {
   options = {
@@ -34,16 +35,18 @@
         };
 
         flux = {
+          operator = {
+            version = lib.mkOption {
+              default = "~0.49";
+              description = "Version of Flux operator to use";
+              type = lib.types.str;
+            };
+          };
+
           source = {
             branch = lib.mkOption {
               default = "main";
               description = "Branch of the Git repository";
-              type = lib.types.str;
-            };
-
-            ignore = lib.mkOption {
-              default = "";
-              description = "Paths to ignore in the repository";
               type = lib.types.str;
             };
 
@@ -58,6 +61,12 @@
               description = "URL of the Git repository";
               type = lib.types.str;
             };
+          };
+
+          version = lib.mkOption {
+            default = "~2.8";
+            description = "Version of Flux to use";
+            type = lib.types.str;
           };
         };
 
@@ -97,6 +106,14 @@
               type = lib.types.int;
             };
           };
+        };
+
+        # Update incrementally, one minor version at a time
+        # See: https://kubernetes.io/releases/version-skew-policy
+        package = lib.mkOption {
+          default = pkgs.k3s_1_33;
+          description = "Versioned k3s package to use";
+          type = lib.types.package;
         };
 
         resources = {
@@ -199,27 +216,59 @@
       };
 
       vm = {
-        cpu = {
-          cores = lib.mkOption {
-            default = 4;
-            description = "Number of CPU cores";
-            type = lib.types.int;
+        kubernetes = {
+          cluster = {
+            name = lib.mkOption {
+              default = "dummy";
+              description = "Name of the Kubernetes cluster";
+              type = lib.types.str;
+            };
           };
-        };
 
-        disk = {
-          size = lib.mkOption {
-            default = 8192;
-            description = "Size of the disk in MB";
-            type = lib.types.int;
+          network = {
+            addresses = {
+              cluster = lib.mkOption {
+                default = "10.44.0.0/16";
+                description = "IP address allocation range for pods";
+                type = lib.types.str;
+              };
+
+              service = lib.mkOption {
+                default = "10.45.0.0/16";
+                description = "IP address allocation range for services";
+                type = lib.types.str;
+              };
+            };
           };
-        };
 
-        memory = {
-          size = lib.mkOption {
-            default = 4096;
-            description = "Size of the memory in MB";
-            type = lib.types.int;
+          resources = {
+            reserved = {
+              system = {
+                cpu = lib.mkOption {
+                  default = "500m";
+                  description = "Reserved CPU for system";
+                  type = lib.types.str;
+                };
+
+                memory = lib.mkOption {
+                  default = "500Mi";
+                  description = "Reserved memory for system";
+                  type = lib.types.str;
+                };
+
+                pid = lib.mkOption {
+                  default = 100;
+                  description = "Reserved number of process IDs for system";
+                  type = lib.types.int;
+                };
+
+                storage = lib.mkOption {
+                  default = "500Mi";
+                  description = "Reserved storage for system";
+                  type = lib.types.str;
+                };
+              };
+            };
           };
         };
 
@@ -234,6 +283,32 @@
             default = "9827df51";
             description = "Unique identifier for the virtual machine";
             type = lib.types.str;
+          };
+        };
+
+        resources = {
+          cpu = {
+            cores = lib.mkOption {
+              default = 4;
+              description = "Number of CPU cores";
+              type = lib.types.int;
+            };
+          };
+
+          disk = {
+            size = lib.mkOption {
+              default = 8192;
+              description = "Size of the disk in MB";
+              type = lib.types.int;
+            };
+          };
+
+          memory = {
+            size = lib.mkOption {
+              default = 8192;
+              description = "Size of the memory in MB";
+              type = lib.types.int;
+            };
           };
         };
       };
