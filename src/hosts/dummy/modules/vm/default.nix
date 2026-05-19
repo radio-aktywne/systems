@@ -14,16 +14,16 @@
 
       virtualisation = {
         # CPU cores for the virtual machine
-        cores = config.virtualisation.vmVariant.constants.vm.cpu.cores;
+        cores = config.virtualisation.vmVariant.constants.vm.resources.cpu.cores;
 
         # Path to the disk image
         diskImage = "./bin/${config.virtualisation.vmVariant.constants.vm.name}.qcow2";
 
         # Size of the disk image
-        diskSize = config.virtualisation.vmVariant.constants.vm.disk.size;
+        diskSize = config.virtualisation.vmVariant.constants.vm.resources.disk.size;
 
         # Memory size for the virtual machine
-        memorySize = config.virtualisation.vmVariant.constants.vm.memory.size;
+        memorySize = config.virtualisation.vmVariant.constants.vm.resources.memory.size;
 
         # Shared directories between the virtual machine and your development machine
         sharedDirectories = {

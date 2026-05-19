@@ -49,30 +49,6 @@
       };
 
       vm = {
-        cpu = {
-          cores = lib.mkOption {
-            default = 4;
-            description = "Number of CPU cores";
-            type = lib.types.int;
-          };
-        };
-
-        disk = {
-          size = lib.mkOption {
-            default = 8192;
-            description = "Size of the disk in MB";
-            type = lib.types.int;
-          };
-        };
-
-        memory = {
-          size = lib.mkOption {
-            default = 4096;
-            description = "Size of the memory in MB";
-            type = lib.types.int;
-          };
-        };
-
         name = lib.mkOption {
           default = "dummy-vm";
           description = "Name of the virtual machine";
@@ -84,6 +60,32 @@
             default = "cc4e8be2";
             description = "Unique identifier for the virtual machine";
             type = lib.types.str;
+          };
+        };
+
+        resources = {
+          cpu = {
+            cores = lib.mkOption {
+              default = 4;
+              description = "Number of CPU cores";
+              type = lib.types.int;
+            };
+          };
+
+          disk = {
+            size = lib.mkOption {
+              default = 8192;
+              description = "Size of the disk in MB";
+              type = lib.types.int;
+            };
+          };
+
+          memory = {
+            size = lib.mkOption {
+              default = 4096;
+              description = "Size of the memory in MB";
+              type = lib.types.int;
+            };
           };
         };
       };
