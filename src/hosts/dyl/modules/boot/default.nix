@@ -1,5 +1,5 @@
 # Boot configuration
-{pkgs, ...}: {
+{
   boot = {
     # Disable console messages
     consoleLogLevel = 0;
@@ -64,9 +64,6 @@
       # Reboot after 10 seconds on panic
       "kernel.panic=10"
 
-      # Enable splash screen
-      "splash"
-
       # Disable log messages
       "quiet"
       "udev.log_level=3"
@@ -102,18 +99,6 @@
           sortKey = "z0_netbootxyz";
         };
       };
-    };
-
-    plymouth = {
-      # Enable splash screen
-      enable = true;
-
-      theme = "angular";
-
-      themePackages = [
-        # See https://github.com/adi1090x/plymouth-themes for more themes
-        (pkgs.adi1090x-plymouth-themes.override {selected_themes = ["angular"];})
-      ];
     };
   };
 }

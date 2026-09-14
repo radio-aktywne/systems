@@ -1,11 +1,5 @@
 # Options that don't fit in any other category
 {
-  fonts = {
-    fontconfig = {
-      enable = true;
-    };
-  };
-
   home = {
     language = {
       # Use English as the default language
