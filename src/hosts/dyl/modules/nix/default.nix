@@ -29,10 +29,10 @@
     settings = {
       allowed-users = [
         # Allow all normal users
-        "@users"
+        "@${config.users.groups.users.name}"
 
         # Allow the wheel group (basically, all users with sudo access)
-        "@wheel"
+        "@${config.users.groups.wheel.name}"
       ];
 
       # Enable automatic optimisation
