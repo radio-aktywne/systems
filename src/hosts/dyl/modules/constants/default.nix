@@ -111,7 +111,7 @@
         # Update incrementally, one minor version at a time
         # See: https://kubernetes.io/releases/version-skew-policy
         package = lib.mkOption {
-          default = pkgs.k3s_1_33;
+          default = pkgs.k3s_1_34;
           description = "Versioned k3s package to use";
           type = lib.types.package;
         };
@@ -297,7 +297,7 @@
 
           disk = {
             size = lib.mkOption {
-              default = 8192;
+              default = 16384;
               description = "Size of the disk in MB";
               type = lib.types.int;
             };

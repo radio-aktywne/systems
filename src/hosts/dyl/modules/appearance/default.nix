@@ -26,7 +26,7 @@
 
     packages = [
       # Emoji font from Google
-      pkgs.noto-fonts-emoji
+      pkgs.noto-fonts-color-emoji
 
       # Roboto font from Google
       pkgs.roboto

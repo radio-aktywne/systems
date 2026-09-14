@@ -12,7 +12,3 @@
 
 # Build
 /build/
-
-# Binary files (like runtime VM state)
-/bin/*
-!/bin/.gitkeep

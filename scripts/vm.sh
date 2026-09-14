@@ -51,4 +51,9 @@ if [[ ! -d "src/hosts/${host}" ]]; then
 	exit 2
 fi
 
-./scripts/run.sh "${host}-virtual-machine" -- "$@"
+./scripts/build.sh "${host}-virtual-machine" || exit 3
+
+state="$(mktemp --directory)"
+trap 'rm --force --recursive "${state}"' EXIT
+
+NIX_DISK_IMAGE="${state}/disk.qcow2" NIX_EFI_VARS="${state}/efi-vars.fd" "./build/${host}-virtual-machine/bin/run-${host}-vm-vm" "$@"

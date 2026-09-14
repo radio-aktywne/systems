@@ -9,11 +9,10 @@ Boot the target machine from [`NixOS` ISO](https://nixos.org/download.html#nixos
 and run the following command:
 
 ```sh
-sudo nixos-generate-config
+sudo nixos-generate-config --show-hardware-config
 ```
 
-Prepare host configuration based on
-the generated `/etc/nixos/hardware-configuration.nix` file.
+Prepare host configuration based on the generated hardware configuration.
 Put it in `hosts/$HOST` directory in the repository,
 where `$HOST` is the name of the host device of your choice.
 When you are ready, commit the changes to the repository.

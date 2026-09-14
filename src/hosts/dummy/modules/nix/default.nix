@@ -1,5 +1,9 @@
 # Nix, NixOS and nixpkgs configuration
-{config, ...}: {
+{
+  config,
+  inputs,
+  ...
+}: {
   nix = {
     settings = {
       experimental-features = [
@@ -13,12 +17,22 @@
   };
 
   nixpkgs = {
+    config = {
+      # Allow packages with non-free licenses
+      allowUnfree = true;
+    };
+
+    overlays = [
+      # Use default overlay
+      inputs.self.overlays.default
+    ];
+
     # Specify the architecture of the system
     hostPlatform = config.constants.platform;
   };
 
   system = {
     # Keep this value as the NixOS version used during first installation
-    stateVersion = "25.05";
+    stateVersion = "26.05";
   };
 }

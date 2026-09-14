@@ -3,12 +3,15 @@
   programs = {
     ssh = {
       enable = true;
+      enableDefaultConfig = false;
 
-      extraConfig = ''
-        # Send environment variables to remote host
-        # COLORTERM is used to demonstrate color support of client terminal
-        SendEnv COLORTERM
-      '';
+      settings = {
+        "*" = {
+          # Send environment variables to remote host
+          # COLORTERM is used to demonstrate color support of client terminal
+          sendEnv = ["COLORTERM"];
+        };
+      };
     };
   };
 }

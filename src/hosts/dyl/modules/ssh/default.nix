@@ -12,7 +12,7 @@
       settings = {
         # Accept environment variables from the client
         # COLORTERM is used to demonstrate color support of client terminal
-        AcceptEnv = "COLORTERM";
+        AcceptEnv = ["COLORTERM"];
 
         # No one can login with password
         # This means only public key authentication is allowed

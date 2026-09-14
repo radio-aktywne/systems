@@ -1,5 +1,9 @@
 # Nix, NixOS and nixpkgs configuration
-{config, ...}: {
+{
+  config,
+  inputs,
+  ...
+}: {
   nix = {
     gc = {
       # Enable automatic garbage collection
@@ -46,12 +50,37 @@
 
   nixpkgs = {
     config = {
-      # Allow packages with unfree licenses
+      # Allow packages with non-free licenses
       allowUnfree = true;
     };
 
+    overlays = [
+      # Use default overlay
+      inputs.self.overlays.default
+    ];
+
     # Specify the architecture of the system
     hostPlatform = config.constants.platform;
+  };
+
+  programs = {
+    command-not-found = {
+      # Don't give users hints about how to install missing commands
+      enable = false;
+    };
+
+    nh = {
+      # Enable Nix CLI helper
+      enable = true;
+
+      # Point to the GitHub repository as the source of truth
+      flake = "github:radio-aktywne/systems#${config.constants.name}";
+    };
+
+    nix-ld = {
+      # Enable Nix dynamic linker
+      enable = true;
+    };
   };
 
   system = {

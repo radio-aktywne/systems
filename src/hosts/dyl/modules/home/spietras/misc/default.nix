@@ -24,6 +24,9 @@
       time = "pl_PL.UTF-8";
     };
 
+    # Make programs use XDG directories whenever supported
+    preferXdgDirectories = true;
+
     # Keep this value as the NixOS version used during first installation
     stateVersion = "23.11";
   };

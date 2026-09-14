@@ -8,6 +8,6 @@
 }: {
   "${inputs.self.nixosConfigurations.${host}.config.nixpkgs.buildPlatform.system}" = {
     # The package will have "-virtual-machine" suffix
-    "${host}-virtual-machine" = inputs.self.nixosConfigurations.${host}.config.system.build.vm;
+    "${host}-virtual-machine" = inputs.self.nixosConfigurations.${host}.config.system.build.vmWithBootLoader;
   };
 }

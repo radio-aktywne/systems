@@ -14,9 +14,6 @@
       # Send files to other devices
       pkgs.croc
 
-      # Containers TUI
-      pkgs.ctop
-
       # curl with httpie syntax
       pkgs.curlie
 
@@ -25,15 +22,6 @@
 
       # Display disk usage
       pkgs.duf
-
-      # Better ls
-      pkgs.eza
-
-      # Display system information
-      pkgs.fastfetch
-
-      # Better find
-      pkgs.fd
 
       # Just ffmpeg
       pkgs.ffmpeg
@@ -44,23 +32,20 @@
       # ImageMagick alternative
       pkgs.graphicsmagick
 
+      # HTTP client
+      pkgs.httpie
+
       # Benchmarking tool
       pkgs.hyperfine
 
-      # Interactive jq playground
-      pkgs.jqp
-
-      # Docker TUI
-      pkgs.lazydocker
-
-      # Minimal text editor
-      pkgs.micro
+      # Network utilities
+      pkgs.inetutils
 
       # Data manipulation
       pkgs.miller
 
       # Serve files
-      pkgs.nodePackages.serve
+      pkgs.serve
 
       # Colors helper
       pkgs.pastel
@@ -70,6 +55,9 @@
 
       # sysctl on steroids
       pkgs.systeroid
+
+      # Terminal screenshots
+      pkgs.termshot
 
       # Share the terminal over the web
       pkgs.ttyd
@@ -88,12 +76,17 @@
 
       # HTTPie alternative
       pkgs.xh
+
+      # YAML processor
+      pkgs.yq-go
     ];
 
-    shellAliases = {
-      # Enable icons in eza
-      ez = "eza --icons";
+    sessionVariables = {
+      # Use micro as default text editor
+      EDITOR = "micro";
+    };
 
+    shellAliases = {
       # Run zellij as a systemd service so it's not killed when the terminal is closed
       zj = "systemd-run --user --scope --quiet -- zellij";
     };
@@ -102,10 +95,6 @@
   programs = {
     # Better cat
     bat = {
-      config = {
-        theme = "Visual Studio Dark+";
-      };
-
       enable = true;
 
       # Enable integration with other programs
@@ -116,6 +105,11 @@
         pkgs.bat-extras.batpipe
         pkgs.bat-extras.batwatch
       ];
+    };
+
+    # Bluetooth TUI
+    bluetuith = {
+      enable = true;
     };
 
     # Navigate directory trees
@@ -140,6 +134,22 @@
       };
     };
 
+    # Better ls
+    eza = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+
+    # Display system information
+    fastfetch = {
+      enable = true;
+    };
+
+    # Better find
+    fd = {
+      enable = true;
+    };
+
     # Fuzzy finder
     fzf = {
       enable = true;
@@ -151,6 +161,11 @@
       enable = true;
     };
 
+    # Interactive jq playground
+    jqp = {
+      enable = true;
+    };
+
     # Manual
     man = {
       enable = true;
@@ -159,10 +174,9 @@
       generateCaches = true;
     };
 
-    # Smart shell history
-    mcfly = {
+    # Minimal text editor
+    micro = {
       enable = true;
-      enableZshIntegration = true;
     };
 
     # File manager
@@ -185,11 +199,6 @@
           auto_update = true;
         };
       };
-    };
-
-    # Google Translate CLI
-    translate-shell = {
-      enable = true;
     };
 
     # YouTube downloader
