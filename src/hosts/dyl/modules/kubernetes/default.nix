@@ -76,8 +76,8 @@ in {
 
   environment = {
     interactiveShellInit = ''
-      # Set KUBECONFIG environment variable for users in kubernetes group
-      if ${pkgs.coreutils}/bin/id --groups --name | ${pkgs.gnugrep}/bin/grep --quiet --word-regexp '${config.users.groups.kubernetes.name}'; then
+      # Set KUBECONFIG environment variable for users in kubernetes and root groups
+      if ${pkgs.coreutils}/bin/id --groups --name | ${pkgs.gnugrep}/bin/grep --extended-regexp --quiet --word-regexp '${config.users.groups.kubernetes.name}|${config.users.groups.root.name}'; then
         export KUBECONFIG='${config.constants.kubernetes.files.kubeconfig}'
       fi
     '';
@@ -285,15 +285,6 @@ in {
     groups = {
       # Create kubernetes group
       kubernetes = {
-      };
-    };
-
-    users = {
-      root = {
-        extraGroups = [
-          # Can use kubernetes
-          config.users.groups.kubernetes.name
-        ];
       };
     };
   };

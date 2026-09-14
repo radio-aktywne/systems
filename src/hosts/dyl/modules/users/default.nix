@@ -24,7 +24,7 @@
           config.users.groups.kubernetes.name
 
           # Can use sudo
-          "wheel"
+          config.users.groups.wheel.name
         ];
 
         isNormalUser = true;
@@ -47,7 +47,7 @@
           config.users.groups.kubernetes.name
 
           # Can use sudo
-          "wheel"
+          config.users.groups.wheel.name
         ];
 
         isNormalUser = true;
