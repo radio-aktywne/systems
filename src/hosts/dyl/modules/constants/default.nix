@@ -111,7 +111,7 @@
         # Update incrementally, one minor version at a time
         # See: https://kubernetes.io/releases/version-skew-policy
         package = lib.mkOption {
-          default = pkgs.k3s_1_35;
+          default = pkgs.k3s_1_36;
           description = "Versioned k3s package to use";
           type = lib.types.package;
         };
