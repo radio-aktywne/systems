@@ -1,9 +1,5 @@
 # Shell configuration
-{
-  config,
-  lib,
-  ...
-}: {
+{config, ...}: {
   programs = {
     starship = {
       enable = true;
@@ -15,6 +11,7 @@
         enable = true;
       };
 
+      dotDir = "${config.xdg.configHome}/zsh";
       enable = true;
       enableCompletion = true;
       enableVteIntegration = true;
@@ -41,11 +38,6 @@
           "^[OA"
         ];
       };
-
-      initContent = lib.mkBefore ''
-        # Create history file if it doesn't exist, because McFly crashes otherwise
-        touch "${config.programs.zsh.history.path}"
-      '';
 
       syntaxHighlighting = {
         enable = true;

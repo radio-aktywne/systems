@@ -15,13 +15,6 @@
     };
   };
 
-  programs = {
-    command-not-found = {
-      # Don't give users hints about how to install missing commands
-      enable = false;
-    };
-  };
-
   services = {
     logrotate = {
       # Disable logrotate

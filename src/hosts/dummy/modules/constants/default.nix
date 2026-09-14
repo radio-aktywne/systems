@@ -74,7 +74,7 @@
 
           disk = {
             size = lib.mkOption {
-              default = 8192;
+              default = 4096;
               description = "Size of the disk in MB";
               type = lib.types.int;
             };

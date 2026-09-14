@@ -46,6 +46,8 @@ shift
 
 ### MAIN ###
 
+mkdir --parents ./build/
+
 nix \
 	--accept-flake-config \
 	--extra-experimental-features \
@@ -53,6 +55,6 @@ nix \
 	--no-warn-dirty \
 	build \
 	--out-link \
-	build \
+	"./build/${target}" \
 	".#${target}" \
 	"$@"

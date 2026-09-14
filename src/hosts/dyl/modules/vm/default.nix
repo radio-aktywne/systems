@@ -5,19 +5,24 @@
   ...
 }: {
   virtualisation = {
-    vmVariant = {
+    vmVariantWithBootLoader = {
+      boot = {
+        # Automatically grow the root partition on boot
+        growPartition = true;
+      };
+
       constants = {
         kubernetes = {
           cluster = {
             # Use different cluster in the virtual machine
-            name = config.virtualisation.vmVariant.constants.vm.kubernetes.cluster.name;
+            name = config.virtualisation.vmVariantWithBootLoader.constants.vm.kubernetes.cluster.name;
           };
 
           network = {
             addresses = {
               # Use different cluster and service CIDR in the virtual machine
-              cluster = config.virtualisation.vmVariant.constants.vm.kubernetes.network.addresses.cluster;
-              service = config.virtualisation.vmVariant.constants.vm.kubernetes.network.addresses.service;
+              cluster = config.virtualisation.vmVariantWithBootLoader.constants.vm.kubernetes.network.addresses.cluster;
+              service = config.virtualisation.vmVariantWithBootLoader.constants.vm.kubernetes.network.addresses.service;
             };
           };
 
@@ -25,21 +30,21 @@
             reserved = {
               # Override reserved resources to adjust them for the virtual machine
               system = {
-                cpu = config.virtualisation.vmVariant.constants.vm.kubernetes.resources.reserved.system.cpu;
-                memory = config.virtualisation.vmVariant.constants.vm.kubernetes.resources.reserved.system.memory;
-                pid = config.virtualisation.vmVariant.constants.vm.kubernetes.resources.reserved.system.pid;
-                storage = config.virtualisation.vmVariant.constants.vm.kubernetes.resources.reserved.system.storage;
+                cpu = config.virtualisation.vmVariantWithBootLoader.constants.vm.kubernetes.resources.reserved.system.cpu;
+                memory = config.virtualisation.vmVariantWithBootLoader.constants.vm.kubernetes.resources.reserved.system.memory;
+                pid = config.virtualisation.vmVariantWithBootLoader.constants.vm.kubernetes.resources.reserved.system.pid;
+                storage = config.virtualisation.vmVariantWithBootLoader.constants.vm.kubernetes.resources.reserved.system.storage;
               };
             };
           };
         };
 
         # Use a different name for the virtual machine
-        name = config.virtualisation.vmVariant.constants.vm.name;
+        name = config.virtualisation.vmVariantWithBootLoader.constants.vm.name;
 
         network = {
           # Use a different host ID for the virtual machine
-          hostId = config.virtualisation.vmVariant.constants.vm.network.hostId;
+          hostId = config.virtualisation.vmVariantWithBootLoader.constants.vm.network.hostId;
         };
       };
 
@@ -52,16 +57,28 @@
 
       virtualisation = {
         # CPU cores for the virtual machine
-        cores = config.virtualisation.vmVariant.constants.vm.resources.cpu.cores;
-
-        # Path to the disk image
-        diskImage = "./bin/${config.virtualisation.vmVariant.constants.vm.name}.qcow2";
+        cores = config.virtualisation.vmVariantWithBootLoader.constants.vm.resources.cpu.cores;
 
         # Size of the disk image
-        diskSize = config.virtualisation.vmVariant.constants.vm.resources.disk.size;
+        diskSize = config.virtualisation.vmVariantWithBootLoader.constants.vm.resources.disk.size;
+
+        fileSystems = {
+          "/" = {
+            # Automatically resize the root filesystem on boot
+            autoResize = true;
+          };
+        };
 
         # Memory size for the virtual machine
-        memorySize = config.virtualisation.vmVariant.constants.vm.resources.memory.size;
+        memorySize = config.virtualisation.vmVariantWithBootLoader.constants.vm.resources.memory.size;
+
+        qemu = {
+          # Extra QEMU options
+          options = [
+            # Use virtio for the VGA device
+            "-vga virtio"
+          ];
+        };
 
         # Shared directories between the virtual machine and your development machine
         sharedDirectories = {

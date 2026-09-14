@@ -1,9 +1,5 @@
 {
   inputs = {
-    nixpkgs = {
-      url = "github:NixOS/nixpkgs/nixos-25.05";
-    };
-
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -13,13 +9,21 @@
       url = "github:hercules-ci/flake-parts";
     };
 
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
+    home-manager = {
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+    multiverse = {
+      url = "github:fzakaria/nixpkgs-multiverse";
+    };
+
+    nixpkgs = {
+      url = "github:NixOS/nixpkgs/nixos-26.05";
+    };
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -34,26 +38,33 @@
       };
   in
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
-      # Import local override if it exists
-      imports = [
+      flake =
         (
-          if builtins.pathExists ./local.nix
-          then ./local.nix
-          else {}
+          inputs.utils.mkHosts {
+            inherit inputs;
+            directory = "hosts";
+            hosts = ["dummy" "dyl"];
+          }
         )
-      ];
+        // {
+          overlays = {
+            default = final: prev: {
+              # Add multiverse as an attribute
+              multiverse = inputs.multiverse.lib.mkMultiverse {
+                config = {
+                  # Allow packages with non-free licenses
+                  allowUnfree = true;
+                };
 
-      # System-specific configuration
-      flake = inputs.utils.mkHosts {
-        inherit inputs;
-        directory = "hosts";
-        hosts = ["dummy" "dyl"];
-      };
+                system = final.stdenv.hostPlatform.system;
+              };
+            };
+          };
+        };
 
       # Sensible defaults
       systems = [
         "x86_64-linux"
-        "i686-linux"
         "aarch64-linux"
         "x86_64-darwin"
         "aarch64-darwin"
@@ -66,25 +77,28 @@
         ...
       }: let
         nix = pkgs.nix;
-        node = pkgs.nodejs;
+        node = pkgs.nodejs_26;
+        nh = pkgs.nh;
         nil = pkgs.nil;
         task = pkgs.go-task;
         coreutils = pkgs.coreutils;
         trunk = pkgs.trunk-io;
-        copier = pkgs.python313.withPackages (ps: [ps.copier]);
+        copier = pkgs.python314.withPackages (ps: [ps.copier]);
         sops = pkgs.sops;
       in {
         # Override pkgs argument
         _module.args.pkgs = import inputs.nixpkgs {
           inherit system;
+
           config = {
             # Allow packages with non-free licenses
             allowUnfree = true;
-            # Allow packages with broken dependencies
-            allowBroken = true;
-            # Allow packages with unsupported system
-            allowUnsupportedSystem = true;
           };
+
+          overlays = [
+            # Use default overlay
+            inputs.self.overlays.default
+          ];
         };
 
         # Set which formatter should be used
@@ -98,6 +112,7 @@
             packages = [
               nix
               node
+              nh
               nil
               task
               coreutils

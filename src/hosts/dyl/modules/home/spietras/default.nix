@@ -1,6 +1,7 @@
 {
   imports = [
     ./apps
+    ./dev
     ./git
     ./gpg
     ./misc
