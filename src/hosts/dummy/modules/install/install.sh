@@ -56,6 +56,22 @@ fi
 
 ### MAIN ###
 
+if ! { swapon --show 2>/dev/null || true; } | grep -q zram; then
+	memory="$(awk '/^MemTotal:/ {print $2}' /proc/meminfo)"
+
+	# Enable compressed swap using zram
+	modprobe zram
+	echo zstd >/sys/block/zram0/comp_algorithm 2>/dev/null || true
+	zramctl /dev/zram0 --size "$((memory * 2))K"
+	mkswap /dev/zram0
+	swapon -p 100 /dev/zram0
+
+	if mountpoint -q /nix/.rw-store; then
+		# Increase writable store overlay size
+		mount -o remount,size=90% /nix/.rw-store
+	fi
+fi
+
 disko-install \
 	--flake "${FLAKE}#${HOST}" \
 	--disk main "${MAIN_DISK_DEVICE}" \
