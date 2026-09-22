@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 ### HELPER FUNCTIONS ###
 
@@ -15,7 +15,7 @@ EOF
 
 unparsed=''
 
-while [[ -n ${1:-} ]]; do
+while [ -n "${1:-}" ]; do
 	case "$1" in
 	-h | --help)
 		print_usage >&2
@@ -36,7 +36,7 @@ set -- ${unparsed}
 
 host="$1"
 
-if [[ -z ${host} ]]; then
+if [ -z "${host}" ]; then
 	printf '%s\n' 'Error: HOST is required.' >&2
 	print_usage >&2
 	exit 1
@@ -46,7 +46,7 @@ shift
 
 ### MAIN ###
 
-if [[ ! -d "src/hosts/${host}" ]]; then
+if [ ! -d "src/hosts/${host}" ]; then
 	printf '%s\n' "Error: ${host} is not a valid host." >&2
 	exit 2
 fi

@@ -34,14 +34,6 @@
         # Memory size for the virtual machine
         memorySize = config.virtualisation.vmVariantWithBootLoader.constants.vm.resources.memory.size;
 
-        qemu = {
-          # Extra QEMU options
-          options = [
-            # Use virtio for the VGA device
-            "-vga virtio"
-          ];
-        };
-
         # Shared directories between the virtual machine and your development machine
         sharedDirectories = {
           # This is needed to transmit your age private keys to the virtual machine
