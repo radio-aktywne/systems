@@ -4,11 +4,6 @@
     difftastic = {
       # Enable difftastic
       enable = true;
-
-      git = {
-        # Enable integration with git for better diffs
-        enable = true;
-      };
     };
 
     git = {

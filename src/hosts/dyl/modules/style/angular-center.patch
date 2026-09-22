@@ -1,0 +1,21 @@
+--- a/angular/angular.script
++++ b/angular/angular.script
+@@ -32,14 +32,15 @@
+   flyingman_image[i] = Image("progress-" + i + ".png");
+ flyingman_sprite = Sprite();
+ 
+-# set image position
+-flyingman_sprite.SetX(Window.GetX() + (Window.GetWidth(0) / 2 - flyingman_image[0].GetWidth() / 2)); # Place images in the center
+-flyingman_sprite.SetY(Window.GetY() + (Window.GetHeight(0) / 2 - flyingman_image[0].GetHeight() / 2));
+ 
+ progress = 0;
+ 
+ fun refresh_callback ()
+   {
++    # set image position
++    flyingman_sprite.SetX(Window.GetX(0) + (Window.GetWidth(0) / 2 - flyingman_image[0].GetWidth() / 2)); # Place images in the center
++    flyingman_sprite.SetY(Window.GetY(0) + (Window.GetHeight(0) / 2 - flyingman_image[0].GetHeight() / 2));
++
+     flyingman_sprite.SetImage(flyingman_image[Math.Int(progress / 2) % 30]);
+     progress++;
+   }
