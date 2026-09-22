@@ -25,6 +25,9 @@
 
           # Can use sudo
           config.users.groups.wheel.name
+
+          # Can use wireshark
+          config.users.groups.wireshark.name
         ];
 
         isNormalUser = true;
@@ -48,6 +51,9 @@
 
           # Can use sudo
           config.users.groups.wheel.name
+
+          # Can use wireshark
+          config.users.groups.wireshark.name
         ];
 
         isNormalUser = true;

@@ -24,9 +24,21 @@
 
       themePackages = [
         # Install adi1090x Plymouth themes
-        (pkgs.adi1090x-plymouth-themes.override {
-          selected_themes = ["angular"];
-        })
+        (
+          (
+            pkgs.adi1090x-plymouth-themes.override {
+              selected_themes = ["angular"];
+            }
+          ).overrideAttrs
+          (old: {
+            patches =
+              (old.patches or [])
+              ++ [
+                # Patch to center the animation on multiple monitors
+                ./angular-center.patch
+              ];
+          })
+        )
       ];
     };
   };

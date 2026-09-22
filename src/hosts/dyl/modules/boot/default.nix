@@ -18,6 +18,12 @@
         "usb_storage"
       ];
 
+      # Kernel modules to load in initrd
+      kernelModules = [
+        # Load Matrox graphics driver to enable early kernel mode setting
+        "mgag200"
+      ];
+
       # Disable log messages
       verbose = false;
     };

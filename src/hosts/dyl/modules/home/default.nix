@@ -11,6 +11,11 @@
       inherit inputs;
     };
 
+    # Modules applied to every user
+    sharedModules = [
+      ./shared
+    ];
+
     # Use global nixpkgs for consistency
     useGlobalPkgs = true;
 

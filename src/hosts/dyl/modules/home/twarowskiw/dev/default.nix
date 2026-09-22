@@ -2,6 +2,9 @@
 {pkgs, ...}: {
   home = {
     packages = [
+      # Sandboxing tool
+      pkgs.bubblewrap
+
       # Containers TUI
       pkgs.ctop
 
@@ -19,6 +22,9 @@
 
       # Python
       pkgs.python3
+
+      # Multipurpose relay
+      pkgs.socat
     ];
   };
 
@@ -36,14 +42,11 @@
     # kubectl colorful output
     kubecolor = {
       enable = true;
-      enableAlias = true;
-      enableZshIntegration = true;
     };
 
     # Kubernetes context switching
     kubeswitch = {
       enable = true;
-      enableZshIntegration = true;
     };
 
     # uv
