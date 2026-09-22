@@ -11,7 +11,7 @@
     name = "install";
 
     # Packages available in the script
-    runtimeInputs = [pkgs.coreutils pkgs.disko pkgs.kmod pkgs.util-linux];
+    runtimeInputs = [pkgs.coreutils pkgs.disko pkgs.kmod pkgs.nix pkgs.util-linux];
 
     # Load the script with substituted values
     text = builtins.readFile (

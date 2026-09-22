@@ -5,6 +5,7 @@
     ./install
     ./network
     ./nix
+    ./security
     ./storage
     ./users
     ./vm

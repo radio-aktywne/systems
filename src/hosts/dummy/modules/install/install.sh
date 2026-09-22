@@ -56,25 +56,36 @@ fi
 
 ### MAIN ###
 
-if ! { swapon --show 2>/dev/null || true; } | grep -q zram; then
+# Enable compressed swap using zram if not used already
+if ! { swapon --show 2>/dev/null || true; } | grep --quiet zram; then
 	memory="$(awk '/^MemTotal:/ {print $2}' /proc/meminfo)"
 
-	# Enable compressed swap using zram
 	modprobe zram
 	echo zstd >/sys/block/zram0/comp_algorithm 2>/dev/null || true
 	zramctl /dev/zram0 --size "$((memory * 2))K"
-	mkswap /dev/zram0
-	swapon -p 100 /dev/zram0
+	mkswap --quiet /dev/zram0
+	swapon --priority 100 /dev/zram0
 
-	if mountpoint -q /nix/.rw-store; then
-		# Increase writable store overlay size
-		mount -o remount,size=90% /nix/.rw-store
+	# Increase writable store overlay size if mounted
+	# Can go over 100% since it's backed by zram swap
+	if mountpoint --quiet /nix/.rw-store; then
+		mount --options remount,size=200% /nix/.rw-store
 	fi
 fi
 
+# Format disks and install the system
 disko-install \
 	--flake "${FLAKE}#${HOST}" \
 	--disk main "${MAIN_DISK_DEVICE}" \
 	--extra-files "${keysfile}" "${KEYS_FILE}" \
 	--write-efi-boot-entries \
 	"$@"
+
+# Free memory used by Nix store to prevent out of memory errors on shutdown
+nix \
+	--accept-flake-config \
+	--extra-experimental-features \
+	'nix-command flakes' \
+	--no-warn-dirty \
+	store \
+	gc
