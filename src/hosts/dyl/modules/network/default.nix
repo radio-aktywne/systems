@@ -44,7 +44,7 @@
       ];
     };
 
-    # Disable default NTP servers
+    # NTP servers for the system time synchronization
     timeServers = [
       # ntp.org is probably the most reliable NTP server
       "pool.ntp.org"
