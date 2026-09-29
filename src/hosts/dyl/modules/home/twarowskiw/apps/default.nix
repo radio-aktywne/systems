@@ -108,11 +108,6 @@
       enable = true;
     };
 
-    # Change shell configuration on the fly
-    direnv = {
-      enable = true;
-    };
-
     # Better ls
     eza = {
       enable = true;
