@@ -3,6 +3,7 @@
 keys:
   - &systems age1mahfjxj9z6rj4kpx0jheeaj7d5rlnt0hxdvaj9wu39tefmp0ns9sf3pk0g
   - &spietras age14uepygtepskwehywergh9fe9j2a3ytqd80y9r2ekfmett6rq3peqjtgxns
+  - &twarowskiw age1vxfxupta5gzzs8uq86agfsuqqq3vvxecmn4dypyf32xflx4rh5mqkkm06f
 creation_rules:
   # Allow any path in src to be encrypted
   - path_regex: src/.*
@@ -10,3 +11,4 @@ creation_rules:
       - age:
           - *systems
           - *spietras
+          - *twarowskiw
