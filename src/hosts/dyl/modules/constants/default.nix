@@ -37,7 +37,7 @@
         flux = {
           operator = {
             version = lib.mkOption {
-              default = "~0.49";
+              default = "~0.61";
               description = "Version of Flux operator to use";
               type = lib.types.str;
             };
@@ -64,7 +64,7 @@
           };
 
           version = lib.mkOption {
-            default = "~2.8";
+            default = "~2.9";
             description = "Version of Flux to use";
             type = lib.types.str;
           };
