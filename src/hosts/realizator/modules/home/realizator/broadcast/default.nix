@@ -2,6 +2,9 @@
 {pkgs, ...}: {
   home = {
     packages = [
+      # Audio metering
+      pkgs.meters-lv2
+
       # Mixing software
       pkgs.mixxx
 
