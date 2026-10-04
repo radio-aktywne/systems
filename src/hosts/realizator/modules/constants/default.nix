@@ -56,7 +56,7 @@
         disks = {
           main = {
             device = lib.mkOption {
-              default = "/dev/disk/by-id/ata-PH6-CE120_511171201178012578";
+              default = "/dev/disk/by-id/wwn-0x502b2a201d1c1b1a";
               description = "Device path of the main disk";
               type = lib.types.str;
             };
