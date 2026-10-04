@@ -1,16 +1,12 @@
 # Hardware configuration
-{
-  config,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   environment = {
     sessionVariables = {
       # Specify the VA-API driver
-      LIBVA_DRIVER_NAME = "nvidia";
+      LIBVA_DRIVER_NAME = "nouveau";
 
       # Specify the VDPAU driver
-      VDPAU_DRIVER = "nvidia";
+      VDPAU_DRIVER = "va_gl";
     };
   };
 
@@ -35,19 +31,6 @@
       ];
     };
 
-    nvidia = {
-      modesetting = {
-        # Enable kernel mode setting for the NVIDIA driver
-        enable = true;
-      };
-
-      # Use the proprietary kernel module because the open module does not support GTX 660
-      open = false;
-
-      # Use the legacy driver branch supporting the GTX 660
-      package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
-    };
-
     mcelog = {
       # Enable additional logging capabilities for hardware
       enable = true;
@@ -67,26 +50,10 @@
     wirelessRegulatoryDatabase = true;
   };
 
-  nixpkgs = {
-    config = {
-      nvidia = {
-        # Accept the NVIDIA Software license required by the proprietary driver
-        acceptLicense = true;
-      };
-    };
-  };
-
   services = {
     fwupd = {
       # Include a tool for updating the firmware of devices
       enable = true;
-    };
-
-    xserver = {
-      videoDrivers = [
-        # Use the proprietary NVIDIA driver
-        "nvidia"
-      ];
     };
   };
 }
