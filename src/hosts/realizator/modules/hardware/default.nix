@@ -41,10 +41,8 @@
         enable = true;
       };
 
-      open = {
-        # Use the proprietary kernel module because the open module does not support GTX 660
-        enable = false;
-      };
+      # Use the proprietary kernel module because the open module does not support GTX 660
+      open = false;
 
       # Use the legacy driver branch supporting the GTX 660
       package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
