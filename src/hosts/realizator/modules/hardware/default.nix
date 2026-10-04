@@ -4,19 +4,6 @@
   pkgs,
   ...
 }: {
-  boot = {
-    kernelParams = [
-      # Enable NVIDIA DRM kernel mode setting
-      "nvidia-drm.modeset=1"
-
-      # Prevent the simple framebuffer DRM driver from loading
-      "module_blacklist=simpledrm"
-
-      # Prevent the simple framebuffer platform driver from initializing
-      "initcall_blacklist=simpledrm_platform_driver_init"
-    ];
-  };
-
   environment = {
     sessionVariables = {
       # Specify the VA-API driver
