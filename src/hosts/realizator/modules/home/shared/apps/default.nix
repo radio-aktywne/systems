@@ -31,14 +31,22 @@
     ghostty = {
       settings = {
         keybind = lib.mkDefault [
-          # Copy to clipboard without formatting
-          "ctrl+shift+c=copy_to_clipboard:plain"
+          # Copy to clipboard without formatting when there is a selection
+          "performable:ctrl+c=copy_to_clipboard:plain"
+          "performable:ctrl+shift+c=copy_to_clipboard:plain"
+
+          # Paste from clipboard
+          "ctrl+v=paste_from_clipboard"
+          "ctrl+shift+v=paste_from_clipboard"
 
           # Move by word
           "alt+left=esc:b"
           "alt+right=esc:f"
 
           # Delete word
+          "alt+backspace=text:\\x1b\\x7f"
+
+          # Delete word forward
           "alt+delete=esc:d"
 
           # Jump between prompts
@@ -52,6 +60,14 @@
     man = {
       # Generate page index cache
       generateCaches = lib.mkDefault true;
+    };
+
+    # Minimal text editor
+    micro = {
+      settings = {
+        # Use the terminal clipboard for copy-paste operations
+        clipboard = lib.mkDefault "terminal";
+      };
     };
 
     # TLDR
