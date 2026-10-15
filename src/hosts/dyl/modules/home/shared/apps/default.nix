@@ -33,6 +33,14 @@
       generateCaches = lib.mkDefault true;
     };
 
+    # Minimal text editor
+    micro = {
+      settings = {
+        # Use the terminal clipboard for copy-paste operations
+        clipboard = lib.mkDefault "terminal";
+      };
+    };
+
     # TLDR
     tealdeer = {
       settings = {
