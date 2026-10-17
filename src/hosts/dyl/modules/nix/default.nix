@@ -83,6 +83,13 @@
     };
   };
 
+  services = {
+    envfs = {
+      # Provide binaries at /bin and /usr/bin
+      enable = true;
+    };
+  };
+
   system = {
     autoUpgrade = {
       # Check for updates every day at night
