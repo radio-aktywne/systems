@@ -28,6 +28,11 @@
       enable = true;
     };
 
+    # GitHub CLI
+    gh = {
+      enable = true;
+    };
+
     # Kubernetes TUI
     k9s = {
       enable = true;

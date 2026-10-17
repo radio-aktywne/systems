@@ -32,6 +32,11 @@
       enable = true;
     };
 
+    # GitHub CLI
+    gh = {
+      enable = true;
+    };
+
     # uv
     uv = {
       enable = true;
