@@ -138,6 +138,11 @@
       enable = true;
     };
 
+    # Google Chrome web browser
+    google-chrome = {
+      enable = true;
+    };
+
     # JSON processor
     jq = {
       enable = true;
