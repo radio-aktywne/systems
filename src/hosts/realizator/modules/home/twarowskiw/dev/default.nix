@@ -6,9 +6,6 @@
 }: {
   home = {
     packages = [
-      # Sandboxing tool
-      pkgs.bubblewrap
-
       # Containers TUI
       pkgs.ctop
 
@@ -26,9 +23,6 @@
 
       # Python
       pkgs.python3
-
-      # Multipurpose relay
-      pkgs.socat
     ];
   };
 

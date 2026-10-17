@@ -1,5 +1,9 @@
 # Things related to security
-{config, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   environment = {
     sessionVariables = {
       # Point tools to the system CA bundle
@@ -11,6 +15,17 @@
       PERL_LWP_SSL_CA_FILE = config.security.pki.caBundle;
       SSL_CERT_FILE = config.security.pki.caBundle;
     };
+
+    systemPackages = [
+      # Sandboxing tool
+      pkgs.bubblewrap
+
+      # User-mode networking for sandboxed tools
+      pkgs.slirp4netns
+
+      # Network utility
+      pkgs.socat
+    ];
   };
 
   networking = {
