@@ -42,11 +42,11 @@
   "devEngines": {
     "packageManager": {
       "name": "npm",
-      "version": "~11.19"
+      "version": "~11.20"
     },
     "runtime": {
       "name": "node",
-      "version": "~26.8"
+      "version": "~26.13"
     }
   }
 }
