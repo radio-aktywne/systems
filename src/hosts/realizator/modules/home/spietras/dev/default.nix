@@ -32,8 +32,18 @@
       enable = true;
     };
 
+    # Docker CLI config
+    docker-cli = {
+      enable = true;
+    };
+
     # GitHub CLI
     gh = {
+      enable = true;
+    };
+
+    # Docker TUI
+    lazydocker = {
       enable = true;
     };
 
